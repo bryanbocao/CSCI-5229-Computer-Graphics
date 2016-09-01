@@ -1,1 +1,1 @@
-# CSCI-5229-Computer-graphics
+# CSCI-5229-Computer-Graphics
