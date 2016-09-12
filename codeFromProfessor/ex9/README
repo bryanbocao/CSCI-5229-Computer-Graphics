@@ -1,0 +1,15 @@
+ex9: Projections
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Draw 27 cubes to demonstrate orthogonal & prespective projections
+
+Key bindings
+  m          Toggle between perspective and orthogonal
+  +/-        Changes field of view for perspective
+  a          Toggle axes
+  arrows     Change view angle
+  PgDn/PgUp  Zoom in and out
+  0          Reset view angle
+  ESC        Exit
