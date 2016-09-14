@@ -1,0 +1,15 @@
+ex7: Visibility
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Demonstrate hidden surface algorithms using cuboids.
+
+Key bindings
+  m/M    Cycle hidden surface modes
+  n/N    Cycle number of cubes
+  r/R    Reverse directon on magenta vace
+  a      Toggle axes
+  arrows Change view angle
+  0      Reset view angle
+  ESC    Exit
