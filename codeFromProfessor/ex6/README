@@ -1,0 +1,16 @@
+ex6: Coordinates
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Display 2, 3 and 4 dimensional coordinates in 3D.
+
+Key bindings
+  1      2D coordinates
+  2      2D coordinates with fixed Z value
+  3      3D coordinates
+  4      4D coordinates
+  +/-    Increase/decrease z or w
+  arrows Change view angle
+  0      Reset view angle
+  ESC    Exit
