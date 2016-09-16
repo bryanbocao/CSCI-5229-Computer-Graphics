@@ -1,0 +1,23 @@
+HW2: Lorenz Attractor
+CSCI-5229 Fall 2016 Computer Graphics
+Instructor: Willem Schreuder
+Student: Bo Cao
+Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
+
+This program shows a line trace of the sequence of Lorenz attractor. In addition, user can change view positions by angles and lorenz parameters of s, b and r respectively. User can also reset every parameter in this program. X, Y and Z axes are shown in red, green and blue respectively.
+
+To make: 
+On ubuntu terminal, cd to the 'lorenz.c' directory, you will see both the "lorenz.c" and "makefile", enter command "make".
+
+To run this program: after "make", on ubuntu terminal, cd to the directory where 'lorenz.c' is and enter command "./lorenz". Or simply double click the exe file named "lorenz" in the Files.
+
+Key bindings
+  S/s		Increase/decrease s
+  B/b    	Increase/decrease b
+  R/r    	Increase/decrease r
+  A/a    	Toggle axes
+  L/l    	Toggle Lorenz trace lines
+  arrows 	Change view angle
+  0      	Reset view angle
+  space		reset both lorenz and coordinate parameters
+  ESC    	Exit
