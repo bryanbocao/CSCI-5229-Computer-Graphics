@@ -1,0 +1,13 @@
+ex8: 3D Objects
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Demonstrates how to draw objects in 3D.
+
+Key bindings
+  m/M        Cycle through different sets of objects
+  a          Toggle axes
+  arrows     Change view angle
+  0          Reset view angle
+  ESC        Exit
