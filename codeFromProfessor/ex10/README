@@ -1,0 +1,14 @@
+ex10: Polygon Offset
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Demonstrates the use of polygon offset to overdraw lines and polygons.
+
+Key bindings
+  m          Toggle polygon offset on/off
+  a          Toggle axes
+  arrows     Change view angle
+  PgDn/PgUp  Zoom in and out
+  0          Reset view angle
+  ESC        Exit
