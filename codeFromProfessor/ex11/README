@@ -1,0 +1,13 @@
+ex11: GPS trace
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Displays a GPS position over a 24 hour period.
+
+Key bindings
+  x/X        View down X-axis
+  y/Y        View down Y-axis
+  z/Z        View down Z-axis
+  arrows     Change view angle
+  ESC        Exit
