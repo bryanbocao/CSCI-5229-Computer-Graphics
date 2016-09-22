@@ -119,8 +119,8 @@ static void Vertex(double th,double ph)
    glColor3f(Cos(th)*Cos(th) , Sin(ph)*Sin(ph) , Sin(th)*Sin(th));
    glVertex3d(Sin(th)*Cos(ph) , Sin(ph) , Cos(th)*Cos(ph));
 }
-/*
 
+/*
  *  Draw a sphere (version 1)
  *     at (x,y,z)
  *     radius (r)
