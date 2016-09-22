@@ -11,8 +11,9 @@
  *  Demonstrates how to draw objects in 3D.
  *
  *  Key bindings:
- *  m/M        Cycle through different sets of objects
- *  a          Toggle axes
+ *  m/M        Toggle Megaman
+ *  c/C        Toogle Cutman
+ *  a/A          Toggle axes
  *  arrows     Change view angle
  *  0          Reset view angle
  *  ESC        Exit
@@ -32,7 +33,9 @@
 int th=0;         //  Azimuth of view angle
 int ph=0;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
-int axes=1;       //  Display axes
+int toggleAxes=1;       //  Display axes
+int toggleMegaman = 1; // 　Display megaman
+int toggleCutman = 1; // 　Display cutman
 
 //  Cosine and Sine in degrees
 #define Cos(x) (cos((x)*3.1415927/180))
@@ -590,15 +593,22 @@ void display()
    //  Draw a background
    background();
 
-   megaman(-2, 1, -0.5, 0.25, 0, 45, 0);
-   cutman(2, 0.45, 0.5, 0.25, 0, 225, 0);
-   megaman(0, 1, -1.7, 0.6, 0, 0, 0);
-   cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
+   // Draw Megaman
+   if (toggleMegaman) {
+      megaman(-2, 1, -0.5, 0.25, 0, 45, 0);
+      megaman(0, 1, -1.7, 0.6, 0, 0, 0);
+   }
    
+   // Draw Cutman
+   if (toggleCutman) {
+      cutman(2, 0.45, 0.5, 0.25, 0, 225, 0);
+      cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
+   }
+
    //  White
    glColor3f(1,1,1);
    //  Draw axes
-   if (axes)
+   if (toggleAxes)
    {
       glBegin(GL_LINES);
       glVertex3d(0.0,0.0,0.0);
@@ -663,7 +673,11 @@ void key(unsigned char ch,int x,int y)
       th = ph = 0;
    //  Toggle axes
    else if (ch == 'a' || ch == 'A')
-      axes = 1-axes;
+      toggleAxes = 1-toggleAxes;
+   else if (ch == 'm' || ch == 'M')
+      toggleMegaman = 1-toggleMegaman;
+   else if (ch == 'c' || ch == 'C')
+      toggleCutman = 1-toggleCutman;
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
