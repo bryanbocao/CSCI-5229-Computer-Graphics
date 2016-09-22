@@ -29,8 +29,8 @@
 #include <GL/glut.h>
 #endif
 
-int th=-30;         //  Azimuth of view angle
-int ph=15;         //  Elevation of view angle
+int th=-55;         //  Azimuth of view angle
+int ph=10;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
 int toggleAxes=1;       //  Display axes
 int toggleMegaman = 1; // 　Display megaman
@@ -561,23 +561,23 @@ static void background()
     glPushMatrix();
 
     // Draw a ground
-    cube_color(0, -0.2, 0, 2.5, 0.2, 2.5, // x, y, z & dx, dy, dz
+    cube_color(0, -0.2, 0, 1.8, 0.2, 1.8, // x, y, z & dx, dy, dz
 		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
 
     // Draw cubes
+    cube_color(-1, 0.2, 1, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(-1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
 		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-1, 0.2, 2, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-1, 0.5, 2, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+    cube_color(-1, 0.5, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
 		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
 		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
 
     // Draw level 2 floor
-    cube_color(-2, 0.5, -1, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
+    cube_color(-1.3, 0.5, -0.6, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
 		71, 209, 71, 0, 0, 0); // r, g, b & phi, theta, psi
-    ladder(-1.6, 0, -0.22, 2, 0, 90, 0);
+    ladder(-0.9, -0.05, -0.22, 2, 0, 90, 0);
 
     glPopMatrix();
 }
@@ -603,13 +603,13 @@ void display()
 
    // Draw Megaman
    if (toggleMegaman) {
-      megaman(-2, 1, -0.5, 0.25, 0, 45, 0);
-      megaman(0, 1, -1.7, 0.6, 0, 0, 0);
+      megaman(-1.3, 0.98, -0.5, 0.25, 0, 45, 0);
+      megaman(0.3, 1, -1.2, 0.6, 0, 0, 0);
    }
    
    // Draw Cutman
    if (toggleCutman) {
-      cutman(2, 0.45, 0.5, 0.25, 0, 225, 0);
+      cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
       cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
    }
 
@@ -634,6 +634,7 @@ void display()
       glRasterPos3d(0.0,0.0,len);
       Print("Z");
    }
+
    //  Five pixels from the lower left corner of the window
    glWindowPos2i(5,5);
    //  Print the text string
