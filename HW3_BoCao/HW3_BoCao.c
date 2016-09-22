@@ -502,6 +502,45 @@ static void cutman(double x, double y, double z, double ds, double phi, double t
 }
 
 /*
+ * Draw a ladder
+ *	at (x, y, z)
+ *      with length (dy)
+ *      rotated phi about the x axis
+ *      rotated theta about the y axis
+ *      rotated psi about the z axis
+ */
+static void ladder(double x, double y, double z, double dy, double phi, double theta, double psi)
+{
+    // Save transformation
+    glPushMatrix();
+    
+    // Offset and scale
+    glTranslated(x, y, z);
+    glRotated(phi, 1, 0, 0);
+    glRotated(theta, 0, 1, 0);
+    glRotated(psi, 0, 0, 1);
+    glScaled(1, dy, 1);
+
+    // Draw left stick
+    cube_color(0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
+		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
+		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.05, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.1, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.15, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.2, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.25, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+
+    glPopMatrix();
+}
+
+/*
  * Draw a background
  *	at (0, -0.2, 0)
  *
@@ -527,6 +566,8 @@ static void background()
     // Draw level 2 floor
     cube_color(-2, 0.5, -1, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
 		71, 209, 71, 0, 0, 0); // r, g, b & phi, theta, psi
+    ladder(-1.6, 0, -0.22, 2, 0, 90, 0);
+
     glPopMatrix();
 }
 
