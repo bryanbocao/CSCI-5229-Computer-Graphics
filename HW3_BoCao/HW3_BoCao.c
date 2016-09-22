@@ -511,6 +511,7 @@ static void background()
     // Save transformation
     glPushMatrix();
 
+    // Draw a ground
     cube_color(0, -0.2, 0, 2.5, 0.2, 2.5, // x, y, z & dx, dy, dz
 		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
     
@@ -538,8 +539,8 @@ void display()
 
    megaman(-2, 0.45, -0.5, 0.25, 0, 45, 0);
    cutman(2, 0.45, 0.5, 0.25, 0, 225, 0);
-   //megaman(0, 0, 0, 0.4, 0, 0, 0);
-   //cutman(0, 0, 0, 0.4, 0, 0, 0);
+   megaman(0, 1, -1.7, 0.6, 0, 0, 0);
+   cutman(1, 0.4, 1.5, 0.1, 0, 180, 0);
    
    //  White
    glColor3f(1,1,1);
