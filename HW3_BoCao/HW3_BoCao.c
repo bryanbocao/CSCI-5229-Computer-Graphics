@@ -514,7 +514,19 @@ static void background()
     // Draw a ground
     cube_color(0, -0.2, 0, 2.5, 0.2, 2.5, // x, y, z & dx, dy, dz
 		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
-    
+    // Draw cubes
+    cube_color(-1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-1, 0.2, 2, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-1, 0.5, 2, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+
+    // Draw level 2 floor
+    cube_color(-2, 0.5, -1, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
+		71, 209, 71, 0, 0, 0); // r, g, b & phi, theta, psi
     glPopMatrix();
 }
 
@@ -537,10 +549,10 @@ void display()
    //  Draw a background
    background();
 
-   megaman(-2, 0.45, -0.5, 0.25, 0, 45, 0);
+   megaman(-2, 1, -0.5, 0.25, 0, 45, 0);
    cutman(2, 0.45, 0.5, 0.25, 0, 225, 0);
    megaman(0, 1, -1.7, 0.6, 0, 0, 0);
-   cutman(1, 0.4, 1.5, 0.1, 0, 180, 0);
+   cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
    
    //  White
    glColor3f(1,1,1);
