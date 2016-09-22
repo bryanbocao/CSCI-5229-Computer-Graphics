@@ -33,6 +33,7 @@ int th=0;         //  Azimuth of view angle
 int ph=0;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
 int axes=1;       //  Display axes
+int mode=0;       //  What to display
 
 //  Cosine and Sine in degrees
 #define Cos(x) (cos((x)*3.1415927/180))
@@ -62,7 +63,7 @@ void Print(const char* format , ...)
  *     at (x,y,z)
  *     dimentions (dx,dy,dz)
  *     rotated th about the y axis
- *
+ */
 static void cube(double x,double y,double z,
                  double dx,double dy,double dz,
                  double th)
@@ -116,74 +117,6 @@ static void cube(double x,double y,double z,
    //  Undo transformations
    glPopMatrix();
 }
-*/
-
-/*
- *  Draw a cube with color 0 ~ 255 from (r, g, b)
- *     at (x,y,z)
- *     dimentions (dx,dy,dz)
- *     rotated psi about the x axis
- *     rotated theta about the y axis
- *     rotated phi about the z axis
- */
-static void cube_color(double x,double y,double z,
-                 double dx,double dy,double dz,
-                 double r, double g, double b,
-                 double phi, double theta, double psi)
-{
-   //  Save transformation
-   glPushMatrix();
-   //  Offset
-   glTranslated(x,y,z);
-   glRotated(phi,1,0,0);
-   glRotated(theta,0,1,0);
-   glRotated(psi,0,0,1);
-   glScaled(dx,dy,dz);
-   //scale color into 255 color space
-   double sr = r / 255, sg = g / 255, sb = b / 255;
-   //  Cube
-   glBegin(GL_QUADS);
-   //  Front
-   glColor3d(sr, sg, sb);
-   glVertex3f(-1,-1, 1);
-   glVertex3f(+1,-1, 1);
-   glVertex3f(+1,+1, 1);
-   glVertex3f(-1,+1, 1);
-   //  Back
-   glColor3d(sr, sg, sb);
-   glVertex3f(+1,-1,-1);
-   glVertex3f(-1,-1,-1);
-   glVertex3f(-1,+1,-1);
-   glVertex3f(+1,+1,-1);
-   //  Right
-   glColor3d(sr, sg, sb);
-   glVertex3f(+1,-1,+1);
-   glVertex3f(+1,-1,-1);
-   glVertex3f(+1,+1,-1);
-   glVertex3f(+1,+1,+1);
-   //  Left
-   glColor3d(sr, sg, sb);
-   glVertex3f(-1,-1,-1);
-   glVertex3f(-1,-1,+1);
-   glVertex3f(-1,+1,+1);
-   glVertex3f(-1,+1,-1);
-   //  Top
-   glColor3d(sr, sg, sb);
-   glVertex3f(-1,+1,+1);
-   glVertex3f(+1,+1,+1);
-   glVertex3f(+1,+1,-1);
-   glVertex3f(-1,+1,-1);
-   //  Bottom
-   glColor3d(sr, sg, sb);
-   glVertex3f(-1,-1,-1);
-   glVertex3f(+1,-1,-1);
-   glVertex3f(+1,-1,+1);
-   glVertex3f(-1,-1,+1);
-   //  End
-   glEnd();
-   //  Undo transformations
-   glPopMatrix();
-}
 
 /*
  *  Draw vertex in polar coordinates
@@ -194,24 +127,12 @@ static void Vertex(double th,double ph)
    glVertex3d(Sin(th)*Cos(ph) , Sin(ph) , Cos(th)*Cos(ph));
 }
 
-
 /*
- *  Draw vertex in polar coordinates with specific color (r, g, b);
- *
-static void Vertex_color(double r, double g, double b)
-{
-   double sr = r / 255, sg = g / 255, sb = b / 255;
-   glColor3d(sr, sg , sb);
-   glVertex3d(sr , sg , sb);
-}
-*/
-
-/*
- *  Draw a sphere
+ *  Draw a sphere (version 1)
  *     at (x,y,z)
  *     radius (r)
  */
-static void sphere(double x,double y,double z,double r)
+static void sphere1(double x,double y,double z,double r)
 {
    const int d=5;
    int th,ph;
@@ -257,98 +178,219 @@ static void sphere(double x,double y,double z,double r)
 }
 
 /*
- *  Draw a Megaman
- *     at (x, y, z)
- *     scale (ds)
- *     rotated phi about the x axis
- *     rotated theta about the y axis
- *     rotated psi about the z axis
- */ 
-static void megaman(double x, double y, double z, double ds, double phi, double theta, double psi)
+ *  Draw a sphere (version 2)
+ *     at (x,y,z)
+ *     radius (r)
+ */
+static void sphere2(double x,double y,double z,double r)
 {
-    // Save transformation
-    glPushMatrix();
+   const int d=5;
+   int th,ph;
 
-    // Offset and scale
-    glTranslated(x, y, z);
-    glRotated(phi, 1, 0, 0);
-    glRotated(theta, 0, 1, 0);
-    glRotated(psi, 0, 0, 1);
-    glScaled(ds, ds, ds);
+   //  Save transformation
+   glPushMatrix();
+   //  Offset and scale
+   glTranslated(x,y,z);
+   glScaled(r,r,r);
 
-    // Head
-    //cube_color(0, 0, 0, 1, 1, 1, 51, 102, 255, 0);
+   //  Latitude bands
+   for (ph=-90;ph<90;ph+=d)
+   {
+      glBegin(GL_QUAD_STRIP);
+      for (th=0;th<=360;th+=d)
+      {
+         Vertex(th,ph);
+         Vertex(th,ph+d);
+      }
+      glEnd();
+   }
 
-    // Draw Neck
-    cube_color(0, 0.2, 0, 0.1, 0.05, 0.1, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi    
+   //  Undo transformations
+   glPopMatrix();
+}
 
-    // Draw Body
-    cube_color(0, 0, 0, 0.25, 0.2, 0.15, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    //sphere(0.3, 0.05, 0, 0.15);
-    //sphere(-0.3, 0.05, 0, 0.15);
-    cube_color(0, -0.27, 0, 0.19, 0.05, 0.1, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    
-    // Draw Arm
-    // Draw Left Arm
-    cube_color(0.42, 0.05, 0, 0.18, 0.08, 0.08, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(0.5, 0.05, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(0.8, 0.05, 0, 0.25, 0.2, 0.2, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(1.1, 0.05, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    sphere(1.1, 0.05, 0, 0.15);
+/*
+ *  Draw a airplane shaped polygon at (x,y,z)
+ */
+static void PolyPlane(int type,double x,double y,double z)
+{
+   //  Save transformation
+   glPushMatrix();
+   //  Offset
+   glTranslated(x,y,z);
+   //  Fuselage and wings
+   glColor3f(1,1,0); 
+   glBegin(type);
+   glVertex2f( 1.0, 0.0);
+   glVertex2f( 0.8, 0.1);
+   glVertex2f( 0.0, 0.1);
+   glVertex2f(-1.0, 0.5);
+   glVertex2f(-1.0,-0.5);
+   glVertex2f( 0.0,-0.1);
+   glVertex2f( 0.8,-0.1);
+   glEnd();
+   //  Vertical tail
+   glColor3f(1,0,0);
+   glBegin(type);
+   glVertex3f(-1.0, 0.0,0.0);
+   glVertex3f(-1.0, 0.0,0.5);
+   glVertex3f(-0.5, 0.0,0.0);
+   glEnd();
+   //  Undo transformations
+   glPopMatrix();
+}
 
-    // Draw Right Arm
-    cube_color(-0.32, 0.05, 0.16, 0.08, 0.08, 0.18, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-0.32, 0.05, 0.35, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-0.32, 0.05, 0.65, 0.2, 0.2, 0.25, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-0.32, 0.05, 0.95, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    sphere(-0.32, 0.05, 0.95, 0.15);
-    //cube_color(0.6, 0, 0, 0.4, 0., 0.2, 77, 148, 255, 0);
+/*
+ *  Draw a flat airplane at (x,y,z)
+ */
+static void FlatPlane(double x,double y,double z)
+{
+   //  Save transformation
+   glPushMatrix();
+   //  Offset
+   glRotated(-90,1,0,0);
+   glTranslated(x,y,z);
+   //  Fuselage
+   glColor3f(0,0,1);
+   glBegin(GL_POLYGON);
+   glVertex2f( 1.0, 0.0);
+   glVertex2f( 0.8, 0.1);
+   glVertex2f(-1.0, 0.1);
+   glVertex2f(-1.0,-0.1);
+   glVertex2f( 0.8,-0.1);
+   glEnd();
+   //  Wings
+   glColor3f(1,1,0);
+   glBegin(GL_TRIANGLES);
+   //  Starboard
+   glVertex2f( 0.0, 0.1);
+   glVertex2f(-1.0, 0.1);
+   glVertex2f(-1.0, 0.5);
+   //  Port
+   glVertex2f( 0.0,-0.1);
+   glVertex2f(-1.0,-0.1);
+   glVertex2f(-1.0,-0.5);
+   glEnd();
+   //  Vertical tail
+   glColor3f(1,0,0);
+   glBegin(GL_TRIANGLES);
+   glVertex3f(-1.0, 0.0,0.0);
+   glVertex3f(-1.0, 0.0,0.5);
+   glVertex3f(-0.5, 0.0,0.0);
+   glEnd();
+   //  Undo transformations
+   glPopMatrix();
+}
 
-    // Draw Underwear
-    cube_color(0, -0.4, 0, 0.15, 0.08, 0.12, // x, y, z & dx, dy, dz
-		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+/*
+ *  Draw solid airplane
+ *    at (x,y,z)
+ *    nose towards (dx,dy,dz)
+ *    up towards (ux,uy,uz)
+ */
+static void SolidPlane(double x,double y,double z,
+                       double dx,double dy,double dz,
+                       double ux,double uy, double uz)
+{
+   // Dimensions used to size airplane
+   const double wid=0.05;
+   const double nose=+0.50;
+   const double cone= 0.20;
+   const double wing= 0.00;
+   const double strk=-0.20;
+   const double tail=-0.50;
+   //  Unit vector in direction of flght
+   double D0 = sqrt(dx*dx+dy*dy+dz*dz);
+   double X0 = dx/D0;
+   double Y0 = dy/D0;
+   double Z0 = dz/D0;
+   //  Unit vector in "up" direction
+   double D1 = sqrt(ux*ux+uy*uy+uz*uz);
+   double X1 = ux/D1;
+   double Y1 = uy/D1;
+   double Z1 = uz/D1;
+   //  Cross product gives the third vector
+   double X2 = Y0*Z1-Y1*Z0;
+   double Y2 = Z0*X1-Z1*X0;
+   double Z2 = X0*Y1-X1*Y0;
+   //  Rotation matrix
+   double mat[16];
+   mat[0] = X0;   mat[4] = X1;   mat[ 8] = X2;   mat[12] = 0;
+   mat[1] = Y0;   mat[5] = Y1;   mat[ 9] = Y2;   mat[13] = 0;
+   mat[2] = Z0;   mat[6] = Z1;   mat[10] = Z2;   mat[14] = 0;
+   mat[3] =  0;   mat[7] =  0;   mat[11] =  0;   mat[15] = 1;
 
-    // Draw Legs
-    // Draw Left Leg
-    cube_color(0.15, -0.6, 0, 0.08, 0.17, 0.08, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 25); // r, g, b & phi, theta, psi
-    cube_color(0.25, -0.8, 0, 0.14, 0.08, 0.14, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
-    cube_color(0.3, -0.9, 0, 0.2, 0.1, 0.2, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
-    cube_color(0.41, -1.1, 0, 0.3, 0.15, 0.3, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
-    cube_color(0.55, -1.4, 0, 0.4, 0.3, 0.4, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
-    cube_color(0.65, -1.6, 0.1, 0.5, 0.1, 0.5, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
+   //  Save current transforms
+   glPushMatrix();
+   //  Offset, scale and rotate
+   glTranslated(x,y,z);
+   glMultMatrixd(mat);
+   //  Nose (4 sided)
+   glColor3f(0,0,1);
+   glBegin(GL_TRIANGLES);
+   glVertex3d(nose, 0.0, 0.0);
+   glVertex3d(cone, wid, wid);
+   glVertex3d(cone,-wid, wid);
 
-    // Draw Right Leg
-    cube_color(-0.15, -0.6, 0, 0.08, 0.17, 0.08, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, -25); // r, g, b & phi, theta, psi
-    cube_color(-0.25, -0.8, 0, 0.14, 0.08, 0.14, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
-    cube_color(-0.3, -0.9, 0, 0.2, 0.1, 0.2, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
-    cube_color(-0.41, -1.1, 0, 0.3, 0.15, 0.3, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
-    cube_color(-0.55, -1.4, 0, 0.4, 0.3, 0.4, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
-    cube_color(-0.65, -1.6, 0.1, 0.5, 0.1, 0.5, // x, y, z & dx, dy, dz
-		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
+   glVertex3d(nose, 0.0, 0.0);
+   glVertex3d(cone, wid,-wid);
+   glVertex3d(cone,-wid,-wid);
 
-    glPopMatrix();
+   glVertex3d(nose, 0.0, 0.0);
+   glVertex3d(cone, wid, wid);
+   glVertex3d(cone, wid,-wid);
+
+   glVertex3d(nose, 0.0, 0.0);
+   glVertex3d(cone,-wid, wid);
+   glVertex3d(cone,-wid,-wid);
+   glEnd();
+   //  Fuselage (square tube)
+   glBegin(GL_QUADS);
+   glVertex3d(cone, wid, wid);
+   glVertex3d(cone,-wid, wid);
+   glVertex3d(tail,-wid, wid);
+   glVertex3d(tail, wid, wid);
+
+   glVertex3d(cone, wid,-wid);
+   glVertex3d(cone,-wid,-wid);
+   glVertex3d(tail,-wid,-wid);
+   glVertex3d(tail, wid,-wid);
+
+   glVertex3d(cone, wid, wid);
+   glVertex3d(cone, wid,-wid);
+   glVertex3d(tail, wid,-wid);
+   glVertex3d(tail, wid, wid);
+
+   glVertex3d(cone,-wid, wid);
+   glVertex3d(cone,-wid,-wid);
+   glVertex3d(tail,-wid,-wid);
+   glVertex3d(tail,-wid, wid);
+
+   glVertex3d(tail,-wid, wid);
+   glVertex3d(tail, wid, wid);
+   glVertex3d(tail, wid,-wid);
+   glVertex3d(tail,-wid,-wid);
+   glEnd();
+   //  Wings (plane triangles)
+   glColor3f(1,1,0);
+   glBegin(GL_TRIANGLES);
+   glVertex3d(wing, 0.0, wid);
+   glVertex3d(tail, 0.0, wid);
+   glVertex3d(tail, 0.0, 0.5);
+
+   glVertex3d(wing, 0.0,-wid);
+   glVertex3d(tail, 0.0,-wid);
+   glVertex3d(tail, 0.0,-0.5);
+   glEnd();
+   //  Vertical tail (plane triangle)
+   glColor3f(1,0,0);
+   glBegin(GL_POLYGON);
+   glVertex3d(strk, 0.0, 0.0);
+   glVertex3d(tail, 0.3, 0.0);
+   glVertex3d(tail, 0.0, 0.0);
+   glEnd();
+   //  Undo transformations
+   glPopMatrix();
 }
 
 /*
@@ -366,13 +408,58 @@ void display()
    //  Set view angle
    glRotatef(ph,1,0,0);
    glRotatef(th,0,1,0);
-
-   //cube(3,3,3 , 0.3,0.3,0.3 , 0);
-   //cube(5,0,0 , 0.2,0.2,0.2 , 45);
-   //cube(0,5,0 , 0.4,0.4,0.2 , 90);
-   megaman(0, 0, 0, 0.5, 0, 0, 0);
-   //megaman(0, 3, 3, 2, 0, 0, 0);
-   //megaman(2, 2, 2, 0.5, 0, 0, 0);
+   //  Decide what to draw
+   switch (mode)
+   {
+      //  Draw cubes
+      case 0:
+         cube(0,0,0 , 0.3,0.3,0.3 , 0);
+         cube(1,0,0 , 0.2,0.2,0.2 , 45);
+         cube(0,1,0 , 0.4,0.4,0.2 , 90);
+         break;
+      //  Draw spheres
+      case 1:
+         sphere1(0,0,0 , 0.4);
+         sphere1(1,0,0 , 0.2);
+         sphere2(0,1,0 , 0.2);
+         break;
+      //  Line airplane
+      case 2:
+         PolyPlane(GL_LINE_LOOP , 0,0,0);
+         break;
+      //  Polygon airplane
+      case 3:
+         PolyPlane(GL_POLYGON , 0,0,0);
+         break;
+      //  Three flat airplanes
+      case 4:
+         FlatPlane( 0.0, 0.0, 0.0);
+         FlatPlane(-0.5, 0.5,-0.5);
+         FlatPlane(-0.5,-0.5,-0.5);
+         break;
+      // Three solid airplanes
+      case 5:
+         SolidPlane( 0, 0, 0 , 1,0,0 , 0, 1,0);
+         SolidPlane(-1, 1, 0 ,-1,0,0 , 0,-1,0);
+         SolidPlane(-1,-1, 0 ,-1,0,0 , 0, 1,0);
+         break;
+      // Mix of objects
+      case 6:
+         //  Cube
+         cube(-1,0,0 , 0.3,0.3,0.3 , 3*zh);
+         //  Ball
+         sphere1(0,0,0 , 0.3);
+         //  Solid Airplane
+         SolidPlane(Cos(zh),Sin(zh), 0 ,-Sin(zh),Cos(zh),0 , Cos(4*zh),0,Sin(4*zh));
+         //  Utah Teapot
+         glPushMatrix();
+         glTranslatef(0,0,-1);
+         glRotatef(zh,0,1,0);
+         glColor3f(Cos(zh)*Cos(zh),0,Sin(zh)*Sin(zh));
+         glutSolidTeapot(0.5);
+         glPopMatrix();
+         break;
+   }
    //  White
    glColor3f(1,1,1);
    //  Draw axes
@@ -442,6 +529,11 @@ void key(unsigned char ch,int x,int y)
    //  Toggle axes
    else if (ch == 'a' || ch == 'A')
       axes = 1-axes;
+   //  Switch display mode
+   else if (ch == 'm')
+      mode = (mode+1)%7;
+   else if (ch == 'M')
+      mode = (mode+6)%7;
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -486,7 +578,7 @@ int main(int argc,char* argv[])
    //  Initialize GLUT and process user parameters
    glutInit(&argc,argv);
    //  Request double buffered, true color window with Z buffering at 600x600
-   glutInitWindowSize(1000,800);
+   glutInitWindowSize(600,600);
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    //  Create the window
    glutCreateWindow("Bo Cao CSCI-5229 Computer Graphics Assignment 3");
