@@ -277,7 +277,54 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     glScaled(ds, ds, ds);
 
     // Head
-    //cube_color(0, 0, 0, 1, 1, 1, 51, 102, 255, 0);
+    cube_color(0, 0.58, 0, 0.45, 0.45, 0.45, // x, y, z & dx, dy, dz
+		256, 256, 256, 0, 0, 0); // r, g, b & phi, theta, psi 
+
+    // Helmet
+    // Top
+    cube_color(0, 1.1, -0.03, 0.47, 0.13, 0.47, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.3, -0.06, 0.36, 0.1, 0.36, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1, 0.45, 0.04, 0.1, 0.01, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi  
+    cube_color(0, 1.22, 0.4, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.45, -0.1, 0.1, 0.1, 0.3, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.32, -0.46, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.16, -0.56, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1, -0.68, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Left
+    cube_color(0.5, 0.6, 0, 0.07, 0.45, 0.45, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0.6, 0.6, -0.1, 0.07, 0.2, 0.2, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Right
+    cube_color(-0.5, 0.6, 0, 0.07, 0.45, 0.45, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-0.6, 0.6, -0.1, 0.07, 0.2, 0.2, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Back
+    cube_color(0, 0.6, -0.5, 0.45, 0.45, 0.07, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.6, -0.6, 0.4, 0.4, 0.07, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.6, -0.7, 0.3, 0.3, 0.07, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+ 
+    // Eyes
+    cube_color(0.2, 0.62, 0.45, 0.05, 0.2, 0.01, // x, y, z & dx, dy, dz
+		0, 0, 0, 0, 0, 0); // r, g, b & phi, theta, psi  
+    cube_color(-0.2, 0.62, 0.45, 0.05, 0.2, 0.01, // x, y, z & dx, dy, dz
+		0, 0, 0, 0, 0, 0); // r, g, b & phi, theta, psi 
+
+    // Mouth
+    cube_color(0, 0.25, 0.48, 0.2, 0.05, 0.01, // x, y, z & dx, dy, dz
+		0, 0, 0, 0, 0, 0); // r, g, b & phi, theta, psi     
 
     // Draw Neck
     cube_color(0, 0.2, 0, 0.1, 0.05, 0.1, // x, y, z & dx, dy, dz
@@ -286,33 +333,31 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     // Draw Body
     cube_color(0, 0, 0, 0.25, 0.2, 0.15, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    //sphere(0.3, 0.05, 0, 0.15);
-    //sphere(-0.3, 0.05, 0, 0.15);
-    cube_color(0, -0.27, 0, 0.19, 0.05, 0.1, // x, y, z & dx, dy, dz
+    cube_color(0, -0.27, 0, 0.19, 0.07, 0.1, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     
-    // Draw Arm
+    // Draw Arms
     // Draw Left Arm
-    cube_color(0.42, 0.05, 0, 0.18, 0.08, 0.08, // x, y, z & dx, dy, dz
+    cube_color(0.54, 0.02, 0, 0.3, 0.08, 0.08, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(0.5, 0.05, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
+    cube_color(0.85, 0.02, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(0.8, 0.05, 0, 0.25, 0.2, 0.2, // x, y, z & dx, dy, dz
+    cube_color(1.23, 0.02, 0, 0.33, 0.23, 0.23, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(1.1, 0.05, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
+    cube_color(1.6, 0.02, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    sphere(1.1, 0.05, 0, 0.15);
+    sphere(1.6, 0.02, 0, 0.15);
 
     // Draw Right Arm
-    cube_color(-0.32, 0.05, 0.16, 0.08, 0.08, 0.18, // x, y, z & dx, dy, dz
+    cube_color(-0.32, 0.02, 0.2, 0.08, 0.08, 0.3, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-0.32, 0.05, 0.35, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
+    cube_color(-0.32, 0.02, 0.55, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-0.32, 0.05, 0.65, 0.2, 0.2, 0.25, // x, y, z & dx, dy, dz
+    cube_color(-0.32, 0.02, 0.93, 0.23, 0.23, 0.33, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(-0.32, 0.05, 0.95, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
+    cube_color(-0.32, 0.02, 1.3, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    sphere(-0.32, 0.05, 0.95, 0.15);
+    sphere(-0.32, 0.02, 1.3, 0.15);
     //cube_color(0.6, 0, 0, 0.4, 0., 0.2, 77, 148, 255, 0);
 
     // Draw Underwear
@@ -322,7 +367,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     // Draw Legs
     // Draw Left Leg
     cube_color(0.15, -0.6, 0, 0.08, 0.17, 0.08, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 25); // r, g, b & phi, theta, psi
+		77, 195, 255, 0, 0, 25); // r, g, b & phi, theta, psi
     cube_color(0.25, -0.8, 0, 0.14, 0.08, 0.14, // x, y, z & dx, dy, dz
 		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
     cube_color(0.3, -0.9, 0, 0.2, 0.1, 0.2, // x, y, z & dx, dy, dz
@@ -336,7 +381,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
 
     // Draw Right Leg
     cube_color(-0.15, -0.6, 0, 0.08, 0.17, 0.08, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, -25); // r, g, b & phi, theta, psi
+		77, 195, 255, 0, 0, -25); // r, g, b & phi, theta, psi
     cube_color(-0.25, -0.8, 0, 0.14, 0.08, 0.14, // x, y, z & dx, dy, dz
 		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
     cube_color(-0.3, -0.9, 0, 0.2, 0.1, 0.2, // x, y, z & dx, dy, dz
