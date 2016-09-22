@@ -1,5 +1,4 @@
 /*
-
  *  HW3: Scene in 3D
  *  CSCI-5229 Fall 2016 Computer Graphics
  *  Instructor: Willem Schreuder
@@ -12,8 +11,8 @@
  *
  *  Key bindings:
  *  m/M        Toggle Megaman
- *  c/C        Toogle Cutman
- *  a/A          Toggle axes
+ *  c/C        Toggle Cutman
+ *  a/A        Toggle axes
  *  arrows     Change view angle
  *  0          Reset view angle
  *  ESC        Exit
@@ -30,8 +29,8 @@
 #include <GL/glut.h>
 #endif
 
-int th=0;         //  Azimuth of view angle
-int ph=0;         //  Elevation of view angle
+int th=-30;         //  Azimuth of view angle
+int ph=15;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
 int toggleAxes=1;       //  Display axes
 int toggleMegaman = 1; // 　Display megaman
@@ -70,12 +69,12 @@ static void Vertex(double th,double ph)
 }
 
 /*
- *  Draw a cube with color 0 ~ 255 from (r, g, b)
+ *  Draw a cube with color space 0 ~ 255 from (r, g, b)
  *     at (x,y,z)
  *     dimentions (dx,dy,dz)
- *     rotated psi about the x axis
+ *     rotated phi about the x axis
  *     rotated theta about the y axis
- *     rotated phi about the z axis
+ *     rotated psi about the z axis
  */
 static void cube_color(double x,double y,double z,
                  double dx,double dy,double dz,
@@ -135,7 +134,6 @@ static void cube_color(double x,double y,double z,
    //  Undo transformations
    glPopMatrix();
 }
-
 
 /*
  *  Draw a sphere
@@ -328,7 +326,14 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     glPopMatrix();
 }
 
-// Draw a cutter
+/*
+ *  Draw a cutter
+ *     at (x, y, z)
+ *     scale (ds)
+ *     rotated phi about the x axis
+ *     rotated theta about the y axis
+ *     rotated psi about the z axis
+ */ 
 static void cutter(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
     // Save transformation
@@ -527,8 +532,10 @@ static void ladder(double x, double y, double z, double dy, double phi, double t
     // Draw left stick
     cube_color(0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
 		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Draw right stick
     cube_color(-0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
 		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
+
     cube_color(0, 0.05, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
 		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(0, 0.1, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
@@ -556,6 +563,7 @@ static void background()
     // Draw a ground
     cube_color(0, -0.2, 0, 2.5, 0.2, 2.5, // x, y, z & dx, dy, dz
 		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
+
     // Draw cubes
     cube_color(-1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
 		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi

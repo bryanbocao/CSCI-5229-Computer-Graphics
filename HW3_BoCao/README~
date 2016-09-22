@@ -1,8 +1,8 @@
-##HW3: Scene in 3D
-##CSCI-5229 Fall 2016 Computer Graphics
-##Instructor: Willem Schreuder
-##Student: Bo Cao
-##Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
+## HW3: Scene in 3D
+## CSCI-5229 Fall 2016 Computer Graphics
+## Instructor: Willem Schreuder
+## Student: Bo Cao
+## Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
 
 Create an OpenGL program this allows a scene to be viewed in 3D . The program
 should allow the scene to be viewed from multiple eye positions directed by
@@ -14,19 +14,16 @@ scale and orientation. The program must create at least one generic object, and
 then create each instance by translation, rotation and scaling of the generic
 object.
 
-###To make: 
+### To make: 
 Open Terminal or Terminator on Ubuntu, cd to the 'HW3_BoCao' directory, you will see both the "HW3_BoCao.c" and "makefile", enter command "make".
 
-###To run this program:
+### To run this program:
 Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'HW3_BoCao' directory and enter command "./HW3_BoCao". Or simply double click the exe file named "HW3_BoCao" in the Files.
 
-Key bindings
-  S/s		Increase/decrease s
-  B/b    	Increase/decrease b
-  R/r    	Increase/decrease r
-  A/a    	Toggle axes
-  L/l    	Toggle Lorenz trace lines
-  arrows 	Change view angle
-  0      	Reset view angle
-  space		reset both lorenz and coordinate parameters
-  ESC    	Exit
+Key bindings:
+	m/M        Toggle Megaman
+	c/C        Toggle Cutman
+	a/A        Toggle axes
+	arrows     Change view angle
+	0          Reset view angle
+	ESC        Exit
