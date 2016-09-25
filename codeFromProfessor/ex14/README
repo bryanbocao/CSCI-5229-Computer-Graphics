@@ -1,0 +1,19 @@
+ex14: Texture Mapping
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Demonstrates basic texture mapping.
+
+Key bindings
+  t          Cycle through tecture maps
+  c          Cycle through colors
+  o          Cycle through objects
+  m          Toggles texture mode between modulate and replace
+  +/-        Change repeat
+  x/X        Move corner left/right
+  y/Y        Move corner up/down
+  a          Toggle axes
+  arrows     Change view angle
+  0          Reset view angle
+  ESC        Exit
