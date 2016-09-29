@@ -1,0 +1,10 @@
+ex12: Colors
+
+Willem A. (Vlakkies) Schreuder
+CSCI4229/5229 Fall 2016
+
+Demonstrate RGB, CMYK and HSV color spaces.
+
+Key bindings
+  Up/Down     Select color component
+  Right/Left  Increase/decrease color component

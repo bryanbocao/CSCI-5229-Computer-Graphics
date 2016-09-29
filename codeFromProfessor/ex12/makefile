@@ -1,9 +1,5 @@
-# HW3: Scene in 3D
-# CSCI-5229 Fall 2016 Computer Graphics
-# Instructor: Willem Schreuder
-# Student: Bo Cao
-# Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
-EXE=HW3_BoCao
+# Example 12
+EXE=ex12
 
 # Main target
 all: $(EXE)
@@ -27,6 +23,19 @@ endif
 CLEAN=rm -f $(EXE) *.o *.a
 endif
 
+# Dependencies
+ex12.o: ex12.c CSCIx229.h
+fatal.o: fatal.c CSCIx229.h
+loadtexbmp.o: loadtexbmp.c CSCIx229.h
+print.o: print.c CSCIx229.h
+project.o: project.c CSCIx229.h
+errcheck.o: errcheck.c CSCIx229.h
+object.o: object.c CSCIx229.h
+
+#  Create archive
+CSCIx229.a:fatal.o loadtexbmp.o print.o project.o errcheck.o object.o
+	ar -rcs $@ $^
+
 # Compile rules
 .c.o:
 	gcc -c $(CFLG) $<
@@ -34,7 +43,7 @@ endif
 	g++ -c $(CFLG) $<
 
 #  Link
-HW3_BoCao:HW3_BoCao.o
+ex12:ex12.o CSCIx229.a
 	gcc -O3 -o $@ $^   $(LIBS)
 
 #  Clean
