@@ -45,11 +45,26 @@ Open Terminal or Terminator on Ubuntu, cd to the 'hw4' directory, you will see b
 Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw4' directory and enter command "./hw4". Or simply double click the exe file named "hw4" in the Files.
 
 Key bindings:
+	l          Toggles lighting
+	a/A        Decrease/increase ambient light
+	d/D        Decrease/increase diffuse light
+	s/S        Decrease/increase specular light
+	e/E        Decrease/increase emitted light
+	n/N        Decrease/increase shininess
+	F1         Toggle smooth/flat shading
+	F2         Toggle local viewer mode
+	F3         Toggle light distance (1/5)
+	F8         Change ball increment
+	F9         Invert bottom normal
+	i/I        Toggles light movement
+	[]         Lower/rise light
 	p/P        Toggles ortogonal/perspective projection
 	+/-        Change field of view of perspective
 	x/X        Toggle axes
+	PgDn/PgUp  Zoom in and out
 	m/M        Toggle Megaman
 	c/C        Toggle Cutman
+	a/A        Toggle axes
 	arrows     Change view angle
 	0          Reset view angle
 	ESC        Exit
