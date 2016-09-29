@@ -51,5 +51,6 @@ Key bindings:
 	m/M        Toggle Megaman
 	c/C        Toggle Cutman
 	arrows     Change view angle
+	PgDn/PgUp  Zoom in and out
 	0          Reset view angle
 	ESC        Exit
