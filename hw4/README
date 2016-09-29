@@ -1,0 +1,30 @@
+## HW3: Scene in 3D
+## CSCI-5229 Fall 2016 Computer Graphics
+## Instructor: Willem Schreuder
+## Student: Bo Cao
+## Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
+## Hours spent to complete: 10 hours and 30 minutes
+
+Create an OpenGL program this allows a scene to be viewed in 3D . The program
+should allow the scene to be viewed from multiple eye positions directed by
+user input.
+
+The scene should consist of several 3D solid objects, and at least two
+instances of the same object, but with each instance at a different position,
+scale and orientation. The program must create at least one generic object, and
+then create each instance by translation, rotation and scaling of the generic
+object.
+
+### To make: 
+Open Terminal or Terminator on Ubuntu, cd to the 'hw3' directory, you will see both the "hw3.c" and "makefile", enter command "make".
+
+### To run this program:
+Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw3' directory and enter command "./hw3". Or simply double click the exe file named "hw3" in the Files.
+
+Key bindings:
+	m/M        Toggle Megaman
+	c/C        Toggle Cutman
+	a/A        Toggle axes
+	arrows     Change view angle
+	0          Reset view angle
+	ESC        Exit
