@@ -9,16 +9,27 @@
  *
  *  Demonstrates basic lighting using a sphere and a cube.
  *
+ *  For first person navigation, please switch 
+ * 
  *  Key bindings:
- *  p/P        Toggles ortogonal/perspective projection
- *  +/-        Change field of view of perspective
- *  x/X        Toggle axes
- *  m/M        Toggle Megaman
- *  c/C        Toggle Cutman
- *  arrows     Change view angle
- *  PgDn/PgUp  Zoom in and out
- *  0          Reset view angle
- *  ESC        Exit
+ *  First Person Navigation Tips: Using w/W s/S a/A d/D q/Q +/- arrows & PgDn/PgUp
+ *  w/W             　　    Move forward from your perspective
+　*  s/S                   Move backward from your perspective
+ *  a/A d/D               Change the position of the reference point
+ *  q/Q                   Move upward from your perspective
+ *  e/E                   Move downward from your perspective
+ *  1                     Change to Orthogonal Projection
+ *  2                     Change to Perspective Projection
+ *  3                     Change to First Person Project (Same as Perspective Project)
+ *  p/P                   Toggles ortogonal/perspective projection
+ *  +/-                   Change field of view of perspective
+ *  x/X                   Toggle axes
+ *  m/M                   Toggle Megaman
+ *  c/C                   Toggle Cutman
+ *  arrows                Change view angle
+ *  PgDn/PgUp             Zoom in and out
+ *  0                     Reset view angle
+ *  ESC                   Exit
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +54,12 @@ int axes=1;       //  Display axes
 int mode=1;       //  Projection mode
 int fov=55;       //  Field of view (for perspective)
 double asp=1;     //  Aspect ratio
-double dim=3.0;   //  Size of world
+double worldSize=3.0;   //  Size of world
+double Ex = 0.0;
+double Ey = 0.0;
+double Ez = 0.0;
+double moveH = 0.0;
+double moveV = 0.0;
 
 //  Cosine and Sine in degrees
 #define Cos(x) (cos((x)*3.1415927/180))
@@ -68,18 +84,20 @@ void Print(const char* format , ...)
       glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,*ch++);
 }
 
-void Project(double fov,double asp,double dim)
+void Project(int mode, double fov,double asp,double worldSize)
 {
    //  Tell OpenGL we want to manipulate the projection matrix
    glMatrixMode(GL_PROJECTION);
    //  Undo previous transformations
    glLoadIdentity();
+
    //  Perspective transformation
-   if (fov)
-      gluPerspective(fov,asp,dim/16,16*dim);
+   if (mode && fov)
+      gluPerspective(fov,asp,worldSize/16,16*worldSize);
    //  Orthogonal transformation
    else
-      glOrtho(-asp*dim,asp*dim,-dim,+dim,-dim,+dim);
+      glOrtho(-asp*worldSize,asp*worldSize,-worldSize,+worldSize,-worldSize,+worldSize);
+
    //  Switch to manipulating the model matrix
    glMatrixMode(GL_MODELVIEW);
    //  Undo previous transformations
@@ -104,7 +122,7 @@ static void Vertex(double th,double ph)
 /*
  *  Draw a cube with color space 0 ~ 255 from (r, g, b)
  *     at (x,y,z)
- *     dimentions (dx,dy,dz)
+ *     worldSizeentions (dx,dy,dz)
  *     rotated phi about the x axis
  *     rotated theta about the y axis
  *     rotated psi about the z axis
@@ -630,10 +648,11 @@ void display()
    //  Perspective - set eye position
    if (mode)
    {
-      double Ex = -2*dim*Sin(th)*Cos(ph);
-      double Ey = +2*dim        *Sin(ph);
-      double Ez = +2*dim*Cos(th)*Cos(ph);
-      gluLookAt(Ex,Ey,Ez , 0,0,0 , 0,Cos(ph),0);
+      Ex = -2*worldSize*Sin(th)*Cos(ph);
+      Ey = +2*worldSize        *Sin(ph);
+      Ez = +2*worldSize*Cos(th)*Cos(ph);
+      // moveH, moveV change the position of the reference point
+      gluLookAt(Ex,Ey,Ez , moveH,moveV,0 , 0,Cos(ph),0);
    }
    //  Orthogonal - set world orientation
    else
@@ -681,8 +700,8 @@ void display()
 
    //  Display parameters
    glWindowPos2i(5,5);
-   Print("Angle=%d,%d  Dim=%.1f FOV=%d Projection=%s",
-     th,ph,dim,fov,mode?"Perpective":"Orthogonal");
+   Print("Angle=%d,%d  worldSize=%.1f FOV=%d Projection=%s",
+     th,ph,worldSize,fov,mode?"Perpective":"Orthogonal");
 
    //  Render the scene and make it visible
    ErrCheck("display");
@@ -709,12 +728,12 @@ void special(int key,int x,int y)
    //  Down arrow key - decrease elevation by 5 degrees
    else if (key == GLUT_KEY_DOWN)
       ph -= 5;
-   //  PageUp key - increase dim
+   //  PageUp key - increase worldSize
    else if (key == GLUT_KEY_PAGE_DOWN)
-      dim += 0.1;
-   //  PageDown key - decrease dim
-   else if (key == GLUT_KEY_PAGE_UP && dim>1)
-      dim -= 0.1;
+      worldSize += 0.1;
+   //  PageDown key - decrease worldSize
+   else if (key == GLUT_KEY_PAGE_UP && worldSize>1)
+      worldSize -= 0.1;
    //  Keep angles to +/-360 degrees
    th %= 360;
    ph %= 360;
@@ -743,8 +762,13 @@ void key(unsigned char ch,int x,int y)
    //  Reset view angle
    else if (ch == '0')
       th = ph = 0;
+   //  Reset all parameters
+   else if (ch == ' ') {
+      th = ph = 0;
+      Ex = Ey = Ez = 0;
+      moveH = moveV = 0;
    //  Toggle axes
-   else if (ch == 'x' || ch == 'X')
+   } else if (ch == 'x' || ch == 'X')
       toggleAxes = 1-toggleAxes;
    //  Toggle Megaman
    else if (ch == 'm' || ch == 'M')
@@ -760,8 +784,28 @@ void key(unsigned char ch,int x,int y)
       fov--;
    else if (ch == '+' && ch<179)
       fov++;
+   else if (ch == '1') mode = 0;
+   else if (ch == '2') mode = 1;
+   else if (ch == '3') mode = 1;
+
+   // First person navigation using W A S D in perspective mode
+   if (mode) {
+      if ((ch == 'w' || ch == 'W') && worldSize > 1)
+      	  fov -= 2;
+      else if (ch == 's' || ch == 'S')
+          fov += 2;
+      else if (ch == 'a' || ch == 'A')
+          moveH -= 0.2;
+      else if (ch == 'd' || ch == 'D')
+          moveH += 0.2;
+      else if (ch == 'q' || ch == 'Q')
+      	  moveV += 0.2;
+      else if (ch == 'e' || ch == 'E')
+          moveV -= 0.2;
+   }
    //  Reproject
-   Project(mode?fov:0,asp,dim);
+   
+   Project(mode,fov,asp,worldSize);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -771,7 +815,7 @@ void key(unsigned char ch,int x,int y)
  */
 void reshape(int width,int height)
 {
-   const double dim=2.5;
+   const double worldSize=2.5;
    //  Ratio of the width to the height of the window
    asp = (height>0) ? (double)width/height : 1;
    //  Ratio of the width to the height of the window
@@ -783,12 +827,12 @@ void reshape(int width,int height)
    //  Undo previous transformations
    glLoadIdentity();
    //  Orthogonal projection
-   glOrtho(-w2h*dim,+w2h*dim, -dim,+dim, -dim,+dim);
+   glOrtho(-w2h*worldSize,+w2h*worldSize, -worldSize,+worldSize, -worldSize,+worldSize);
    //  Switch to manipulating the model matrix
    glMatrixMode(GL_MODELVIEW);
    //  Undo previous transformations
    //  Set projection
-   Project(mode?fov:0,asp,dim);
+   Project(mode,fov,asp,worldSize);
    glLoadIdentity();
 }
 
