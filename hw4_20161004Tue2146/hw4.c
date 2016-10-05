@@ -12,7 +12,7 @@
  *  For first person navigation, please switch 
  * 
  *  Key bindings:
- *  First Person Navigation Tips: Using arrows & PgDn/PgUp
+ *  First Person Navigation Tips: Using w/W s/S a/A d/D q/Q +/- arrows & PgDn/PgUp
  *  w/W             　　    Move forward from your perspective
 　*  s/S                   Move backward from your perspective
  *  a/A d/D               Change the position of the reference point
@@ -26,13 +26,7 @@
  *  x/X                   Toggle axes
  *  m/M                   Toggle Megaman
  *  c/C                   Toggle Cutman
- *  .			  Increase world size
- *  ,			  Decrease world size
- *  arrows
- *      Up		  Move forward
- *      Down              Move backward
- *      Left              Rotate view point to left
- *      Right             Rotate view point to right
+ *  arrows                Change view angle
  *  PgDn/PgUp             Zoom in and out
  *  0                     Reset view angle
  *  ESC                   Exit
@@ -64,13 +58,8 @@ double worldSize=3.0;   //  Size of world
 double Ex = 0.0;
 double Ey = 0.0;
 double Ez = 0.0;
-double eye_x = -5.0;
-double eye_y = 1.0;
-double eye_z = -2.0;
-double reference_x = 6;
-double reference_y = 0.5;
-double reference_z = 3;
-int eye_th = 0;
+double moveH = 0.0;
+double moveV = 0.0;
 
 //  Cosine and Sine in degrees
 #define Cos(x) (cos((x)*3.1415927/180))
@@ -657,24 +646,21 @@ void display()
    //  Undo previous transformations
    glLoadIdentity();
    //  Perspective - set eye position
-
-   //  Orthogonal - set world orientation
-   if (mode == 0) {
-       glRotatef(ph,1,0,0);
-       glRotatef(th,0,1,0);
-   } else if (mode == 1) {
+   if (mode)
+   {
       Ex = -2*worldSize*Sin(th)*Cos(ph);
       Ey = +2*worldSize        *Sin(ph);
       Ez = +2*worldSize*Cos(th)*Cos(ph);
-      gluLookAt(Ex,Ey,Ez , 0,0,0 , 0,Cos(ph),0);
-	
-   } else {
-      //gluLookAt(Ex,Ey,Ez , 0,0,0 , 0,Cos(ph),0);
-      gluLookAt(eye_x, eye_y, eye_z, 
-	reference_x * Cos(eye_th),reference_y,reference_z * Sin(eye_th),	
-	0,1,0);
+      // moveH, moveV change the position of the reference point
+      gluLookAt(Ex,Ey,Ez , moveH,moveV,0 , 0,Cos(ph),0);
    }
-   
+   //  Orthogonal - set world orientation
+   else
+   {
+      glRotatef(ph,1,0,0);
+      glRotatef(th,0,1,0);
+   }
+
    //  Draw a background
    background();
 
@@ -714,12 +700,8 @@ void display()
 
    //  Display parameters
    glWindowPos2i(5,5);
-   if (mode == 0)
-   	Print("Angle=%d,%d  worldSize=%.1f FOV=%d Projection=%s",th,ph,worldSize,fov,"Orthogonal");
-   else if (mode == 1)
-   	Print("Angle=%d,%d  worldSize=%.1f FOV=%d Projection=%s",th,ph,worldSize,fov,"Perpective");
-   else if (mode == 2)
-   	Print("Angle=%d,%d  worldSize=%.1f FOV=%d Projection=%s",th,ph,worldSize,fov,"First Person");
+   Print("Angle=%d,%d  worldSize=%.1f FOV=%d Projection=%s",
+     th,ph,worldSize,fov,mode?"Perpective":"Orthogonal");
 
    //  Render the scene and make it visible
    ErrCheck("display");
@@ -734,59 +716,27 @@ void display()
  */
 void special(int key,int x,int y)
 {
-   //  First person navigation using arrows in perspective mode
-   //  Right arrow key - rotate right view
+   //  Right arrow key - increase angle by 5 degrees
    if (key == GLUT_KEY_RIGHT)
-      eye_th += 10;
-   //  Left arrow key - rotate left view
+      th += 5;
+   //  Left arrow key - decrease angle by 5 degrees
    else if (key == GLUT_KEY_LEFT)
-      eye_th -= 10;
-   //  Up arrow key - move forward
-   else if (key == GLUT_KEY_UP) {
-      //eye_x += 0.1;
-      double delta_eye_x = reference_x * Cos(eye_th) - eye_x,
-		delta_eye_z = reference_z * Sin(eye_th) - eye_z;
-      double ratio = delta_eye_x / delta_eye_z;
-      if (ratio >= 0) {
-      	eye_z += 0.1 * Sin(eye_th);
-      	eye_x += 0.1 * ratio * Cos(eye_th);
-        reference_z += 0.1;
-        reference_x += 0.1 * ratio;
-      } else {
-        eye_z -= 0.1 * Sin(eye_th);
-      	eye_x -= 0.1 * ratio * Cos(eye_th);
-        reference_z += 0.1;
-        reference_x += 0.1 * ratio;
-      }
-   }
-   //  Down arrow key - move back
-   else if (key == GLUT_KEY_DOWN) {
-      double delta_eye_x = reference_x * Cos(eye_th) - eye_x,
-		delta_eye_z = reference_z * Sin(eye_th) - eye_z;
-      double ratio = delta_eye_x / delta_eye_z;
-      if (ratio >= 0) {
-      	eye_z -= 0.1 * Sin(eye_th);
-      	eye_x -= 0.1 * ratio * Cos(eye_th);
-        reference_z -= 0.1;
-        reference_x -= 0.1 * ratio;
-      } else {
-        eye_z += 0.1 * Sin(eye_th);
-      	eye_x += 0.1 * ratio * Cos(eye_th);
-        reference_z += 0.1;
-        reference_x += 0.1 * ratio;
-      }
-   }
-   //  PageUp key - increase eye horizontal level
+      th -= 5;
+   //  Up arrow key - increase elevation by 5 degrees
+   else if (key == GLUT_KEY_UP)
+      ph += 5;
+   //  Down arrow key - decrease elevation by 5 degrees
+   else if (key == GLUT_KEY_DOWN)
+      ph -= 5;
+   //  PageUp key - increase worldSize
    else if (key == GLUT_KEY_PAGE_DOWN)
-      eye_y -= 0.1;
-   //  PageDown key - decrease eye horizontal level
+      worldSize += 0.1;
+   //  PageDown key - decrease worldSize
    else if (key == GLUT_KEY_PAGE_UP && worldSize>1)
-      eye_y += 0.1;
-
+      worldSize -= 0.1;
    //  Keep angles to +/-360 degrees
    th %= 360;
    ph %= 360;
-   eye_th %= 360;
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();
 }
@@ -816,6 +766,7 @@ void key(unsigned char ch,int x,int y)
    else if (ch == ' ') {
       th = ph = 0;
       Ex = Ey = Ez = 0;
+      moveH = moveV = 0;
    //  Toggle axes
    } else if (ch == 'x' || ch == 'X')
       toggleAxes = 1-toggleAxes;
@@ -826,40 +777,34 @@ void key(unsigned char ch,int x,int y)
    else if (ch == 'c' || ch == 'C')
       toggleCutman = 1-toggleCutman;
    //  Switch projection mode
-   else if (ch == 'p' || ch == 'P') {
-      mode = mode + 1;
-      mode %= 3;
+   else if (ch == 'p' || ch == 'P')
+      mode = 1-mode;
    //  Change field of view angle
-   } else if (ch == '-' && ch>1)
+   else if (ch == '-' && ch>1)
       fov--;
    else if (ch == '+' && ch<179)
       fov++;
    else if (ch == '1') mode = 0;
    else if (ch == '2') mode = 1;
-   else if (ch == '3') mode = 2;
-   //  d/D - increase angle by 5 degrees
-   else if (ch == 'd' || ch == 'D')
-      th += 5;
-   //  a/A - decrease angle by 5 degrees
-   else if (ch == 'a' || ch == 'A')
-      th -= 5;
-   //  Up arrow key - increase elevation by 5 degrees
-   else if (ch == 'w' || ch == 'W')
-      ph += 5;
-   //  Down arrow key - decrease elevation by 5 degrees
-   else if (ch == 's' || ch == 'S')
-      ph -= 5;
-   //  ',' - increase worldSize
-   else if (ch == ',')
-      worldSize += 0.1;
-   //  '.' - decrease worldSize
-   else if (ch == '.' && worldSize>1)
-      worldSize -= 0.1;
-   //  Keep angles to +/-360 degrees
-   th %= 360;
-   ph %= 360;
+   else if (ch == '3') mode = 1;
 
-   //  Reproject   
+   // First person navigation using W A S D in perspective mode
+   if (mode) {
+      if ((ch == 'w' || ch == 'W') && worldSize > 1)
+      	  fov -= 2;
+      else if (ch == 's' || ch == 'S')
+          fov += 2;
+      else if (ch == 'a' || ch == 'A')
+          moveH -= 0.2;
+      else if (ch == 'd' || ch == 'D')
+          moveH += 0.2;
+      else if (ch == 'q' || ch == 'Q')
+      	  moveV += 0.2;
+      else if (ch == 'e' || ch == 'E')
+          moveV -= 0.2;
+   }
+   //  Reproject
+   
    Project(mode,fov,asp,worldSize);
    //  Tell GLUT it is necessary to redisplay the scene
    glutPostRedisplay();

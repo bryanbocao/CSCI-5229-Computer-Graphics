@@ -45,27 +45,21 @@ Open Terminal or Terminator on Ubuntu, cd to the 'hw4' directory, you will see b
 Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw4' directory and enter command "./hw4". Or simply double click the exe file named "hw4" in the Files.
 
 Key bindings:
- *  First Person Navigation Tips: Using arrows & PgDn/PgUp
- *  w/W             　　    Move forward from your perspective
-　*  s/S                   Move backward from your perspective
- *  a/A d/D               Change the position of the reference point
- *  q/Q                   Move upward from your perspective
- *  e/E                   Move downward from your perspective
- *  1                     Change to Orthogonal Projection
- *  2                     Change to Perspective Projection
- *  3                     Change to First Person Project (Same as Perspective Project)
- *  p/P                   Toggles ortogonal/perspective projection
- *  +/-                   Change field of view of perspective
- *  x/X                   Toggle axes
- *  m/M                   Toggle Megaman
- *  c/C                   Toggle Cutman
- *  .			  Increase world size
- *  ,			  Decrease world size
- *  arrows
- *      Up		  Move forward
- *      Down              Move backward
- *      Left              Rotate view point to left
- *      Right             Rotate view point to right
- *  PgDn/PgUp             Zoom in and out
- *  0                     Reset view angle
- *  ESC                   Exit
+First Person Navigation Tips: Using w/W s/S a/A d/D q/Q +/- arrows & PgDn/PgUp
+	w/W             　　    Move forward from your perspective
+	s/S                   Move backward from your perspective
+	a/A d/D               Change the position of the reference point
+	q/Q                   Move upward from your perspective
+	e/E                   Move downward from your perspective
+	1                     Change to Orthogonal Projection
+	2                     Change to Perspective Projection
+	3                     Change to First Person Project (Same as Perspective Project)
+	p/P                   Toggles ortogonal/perspective projection
+	+/-                   Change field of view of perspective
+	x/X                   Toggle axes
+	m/M                   Toggle Megaman
+	c/C                   Toggle Cutman
+	arrows                Change view angle
+	PgDn/PgUp             Zoom in and out
+	0                     Reset view angle
+	ESC                   Exit

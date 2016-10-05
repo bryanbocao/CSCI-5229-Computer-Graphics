@@ -26,8 +26,6 @@
  *  x/X                   Toggle axes
  *  m/M                   Toggle Megaman
  *  c/C                   Toggle Cutman
- *  .			  Increase world size
- *  ,			  Decrease world size
  *  arrows
  *      Up		  Move forward
  *      Down              Move backward
