@@ -3,7 +3,7 @@
 ## Instructor: Willem Schreuder
 ## Student: Bo Cao
 ## Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
-## Hours spent to complete: 9 hours
+## Hours spent to complete: 16 hours
 
 Create an OpenGL program this allows a scene to be viewed in both orthogonal
 and perspective projections. The program should allow the scene to be viewed
@@ -46,11 +46,16 @@ Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw4'
 
 Key bindings:
  *  First Person Navigation Tips: Using arrows & PgDn/PgUp
- *  w/W             　　    Move forward from your perspective
-　*  s/S                   Move backward from your perspective
- *  a/A d/D               Change the position of the reference point
- *  q/Q                   Move upward from your perspective
- *  e/E                   Move downward from your perspective
+ *  arrows
+ *      Up		  Move forward
+ *      Down              Move backward
+ *      Left              Rotate view point to left
+ *      Right             Rotate view point to right
+ *  PgDn/PgUp             Decrease/Increase horizontal level of view point
+ *
+ *  Orthogonal / Perspective Tips:
+ *  w/W s/S            　　 Change view point up/down
+ *  a/A d/D               Change view point to left/right
  *  1                     Change to Orthogonal Projection
  *  2                     Change to Perspective Projection
  *  3                     Change to First Person Project (Same as Perspective Project)
@@ -59,13 +64,7 @@ Key bindings:
  *  x/X                   Toggle axes
  *  m/M                   Toggle Megaman
  *  c/C                   Toggle Cutman
- *  .			  Increase world size
- *  ,			  Decrease world size
- *  arrows
- *      Up		  Move forward
- *      Down              Move backward
- *      Left              Rotate view point to left
- *      Right             Rotate view point to right
- *  PgDn/PgUp             Zoom in and out
- *  0                     Reset view angle
+ *  .			  Decrease world size
+ *  ,			  Increase world size
+ *  0                     Reset view angle(for all modes)
  *  ESC                   Exit

@@ -13,11 +13,16 @@
  * 
  *  Key bindings:
  *  First Person Navigation Tips: Using arrows & PgDn/PgUp
- *  w/W             　　    Move forward from your perspective
-　*  s/S                   Move backward from your perspective
- *  a/A d/D               Change the position of the reference point
- *  q/Q                   Move upward from your perspective
- *  e/E                   Move downward from your perspective
+ *  arrows
+ *      Up		  Move forward
+ *      Down              Move backward
+ *      Left              Rotate view point to left
+ *      Right             Rotate view point to right
+ *  PgDn/PgUp             Decrease/Increase horizontal level of view point
+ *
+ *  Orthogonal / Perspective Tips:
+ *  w/W s/S            　　 Change view point up/down
+ *  a/A d/D               Change view point to left/right
  *  1                     Change to Orthogonal Projection
  *  2                     Change to Perspective Projection
  *  3                     Change to First Person Project (Same as Perspective Project)
@@ -26,15 +31,9 @@
  *  x/X                   Toggle axes
  *  m/M                   Toggle Megaman
  *  c/C                   Toggle Cutman
- *  .			  Increase world size
- *  ,			  Decrease world size
- *  arrows
- *      Up		  Move forward
- *      Down              Move backward
- *      Left              Rotate view point to left
- *      Right             Rotate view point to right
- *  PgDn/PgUp             Zoom in and out
- *  0                     Reset view angle
+ *  .			  Decrease world size
+ *  ,			  Increase world size
+ *  0                     Reset view angle(for all modes)
  *  ESC                   Exit
  */
 #include <stdio.h>
@@ -747,16 +746,16 @@ void special(int key,int x,int y)
       double delta_eye_x = reference_x * Cos(eye_th) - eye_x,
 		delta_eye_z = reference_z * Sin(eye_th) - eye_z;
       double ratio = delta_eye_x / delta_eye_z;
-      if (ratio >= 0) {
+      if (ratio > 0) {
       	eye_z += 0.1 * Sin(eye_th);
       	eye_x += 0.1 * ratio * Cos(eye_th);
-        reference_z += 0.1;
-        reference_x += 0.1 * ratio;
+	reference_z += 0.1 * Sin(eye_th);
+      	reference_x += 0.1 * ratio * Cos(eye_th);
       } else {
         eye_z -= 0.1 * Sin(eye_th);
       	eye_x -= 0.1 * ratio * Cos(eye_th);
-        reference_z += 0.1;
-        reference_x += 0.1 * ratio;
+	reference_z -= 0.1 * Sin(eye_th);
+      	reference_x -= 0.1 * ratio * Cos(eye_th);
       }
    }
    //  Down arrow key - move back
@@ -764,16 +763,16 @@ void special(int key,int x,int y)
       double delta_eye_x = reference_x * Cos(eye_th) - eye_x,
 		delta_eye_z = reference_z * Sin(eye_th) - eye_z;
       double ratio = delta_eye_x / delta_eye_z;
-      if (ratio >= 0) {
+      if (ratio > 0) {
       	eye_z -= 0.1 * Sin(eye_th);
       	eye_x -= 0.1 * ratio * Cos(eye_th);
-        reference_z -= 0.1;
-        reference_x -= 0.1 * ratio;
+	reference_z -= 0.1 * Sin(eye_th);
+      	reference_x -= 0.1 * ratio * Cos(eye_th);
       } else {
         eye_z += 0.1 * Sin(eye_th);
       	eye_x += 0.1 * ratio * Cos(eye_th);
-        reference_z += 0.1;
-        reference_x += 0.1 * ratio;
+	reference_z += 0.1 * Sin(eye_th);
+      	reference_x += 0.1 * ratio * Cos(eye_th);
       }
    }
    //  PageUp key - increase eye horizontal level
@@ -810,8 +809,16 @@ void key(unsigned char ch,int x,int y)
    if (ch == 27)
       exit(0);
    //  Reset view angle
-   else if (ch == '0')
+   else if (ch == '0') {
       th = ph = 0;
+      eye_x = -5.0;
+      eye_y = 1.0;
+      eye_z = -2.0;
+      reference_x = 6;
+      reference_y = 0.5;
+      reference_z = 3;
+      eye_th = 0;
+   }
    //  Reset all parameters
    else if (ch == ' ') {
       th = ph = 0;
