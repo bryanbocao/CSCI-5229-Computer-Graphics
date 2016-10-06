@@ -820,6 +820,20 @@ void special(int key,int x,int y)
    //  PageDown key - decrease dim
    else if (key == GLUT_KEY_PAGE_UP && dim>1)
       dim -= 0.1;
+   //  Smooth color model
+   else if (key == GLUT_KEY_F1)
+      smooth = 1-smooth;
+   //  Local Viewer
+   else if (key == GLUT_KEY_F2)
+      local = 1-local;
+   else if (key == GLUT_KEY_F3)
+      distance = (distance==1) ? 5 : 1;
+   //  Toggle ball increment
+   else if (key == GLUT_KEY_F8)
+      inc = (inc==10)?3:10;
+   //  Flip sign
+   else if (key == GLUT_KEY_F9)
+      one = -one;
    //  Keep angles to +/-360 degrees
    th %= 360;
    ph %= 360;
