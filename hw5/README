@@ -1,48 +1,50 @@
-## HW4: Projections
+## HW5: Projections
 ## CSCI-5229 Fall 2016 Computer Graphics
 ## Instructor: Willem Schreuder
 ## Student: Bo Cao
 ## Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
-## Hours spent to complete: 6 hours
+## Hours spent to complete: 13 hours
 
-Create an OpenGL program this allows a scene to be viewed in both orthogonal
-and perspective projections. The program should allow the scene to be viewed
-from multiple eye positions directed by user input.
+Write an OpenGL program that incorporates lighting to create a a scene
+consisting of solid objects that can be viewed in three dimensions under user
+control.
 
-You may NOT use the CSCIx229 library for this assignment.
+The purpose of this homework is to give you experience with determening normal
+vectors which are critical in performing the lighting calculations.  Therefore
+the follow are not permitted:
+1) Any GLU and GLUT objects;
+2) Pyramids;
+3) Objects constructed entirely of calls to my cube or sphere functions;
+4) Objects created by Blender or a similar program and imported to the program.
 
-The scene should consist of several 3D solid objects. You may want to simply
-expand on Homework 3.  Using GLU and GLUT objects are still prohibited.
+You may use the CSCIx229 library for this and future assignments, but remember
+to include all the source files with your submission and built the library from
+source in your makefile.
 
-The program should allow the scene to be viewed from different viewpoints using
-the cursor keys or mouse.  The orthogonal and perspective projections should
-allow the entire scene to be viewed on the screen.  Although the scene would
-look slightly different between the projections, the view should be from the
-same vantage point.
-
-The program should allow a third mode which provides for first person
-navigation using a perspective projection.  The cursor keys should allow the
-user to traverse the scene.
+The light should move to demonstrate changes to the scene as a result of
+different light positions.  It will be useful for both debugging and grading
+if the light can be stopped and moved under user control in addition to moving
+automatically.  Choose your light positions such that the lighting effects are
+demonstrated well.
 
 What to turn in:
-1) Source code including makefile to build hw4;
-2) Readme with instructions;
-3) Approximate time it took to complete the assignment.
+1) Source code, makefile to build hw5 and readme;
+2) Approximate time spent on the project.
 
-The purpose of this assignment is to give you some experience with different
-projections. While for any project the projection will be dictated by the
-specific application, realistic scenes would generally be in perspective,
-while orthogonal projections would appear in CAD and similar applications. You
-may want to start by getting you scene created in 3D and view it only using
-the orthogonal projection, and then add the perspective projection second,and
-finally the first person navigation.
+Hint:  Trust your instincts.  If the lighting doesn't look right, it porbably
+is not.  A common error is incorrect normals.
+
+WARNING:  Getting lighting to work correctly is hard.  Expect this homework to
+take a lot more effort than previous assignments.
+
+
 
 
 ### To make: 
-Open Terminal or Terminator on Ubuntu, cd to the 'hw4' directory, you will see both the "hw4.c" and "makefile", enter command "make".
+Open Terminal or Terminator on Ubuntu, cd to the 'hw5' directory, you will see both the "hw5.c" and "makefile", enter command "make".
 
 ### To run this program:
-Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw4' directory and enter command "./hw4". Or simply double click the exe file named "hw4" in the Files.
+Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw5' directory and enter command "./hw5". Or simply double click the exe file named "hw5" in the Files.
 
 Key bindings:
 	l          Toggles lighting

@@ -1,10 +1,10 @@
-# HW4: Projections
+# HW5: Lighting
 # CSCI-5229 Fall 2016 Computer Graphics
 # Instructor: Willem Schreuder
 # Student: Bo Cao
 # Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
 
-EXE=hw4
+EXE=hw5
 
 # Main target
 all: $(EXE)
@@ -35,7 +35,7 @@ endif
 	g++ -c $(CFLG) $<
 
 #  Link
-hw4:hw4.o
+hw5:hw5.o
 	gcc -O3 -o $@ $^   $(LIBS)
 
 #  Clean
