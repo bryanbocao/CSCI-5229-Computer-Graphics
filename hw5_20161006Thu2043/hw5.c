@@ -1,5 +1,5 @@
 /*
- *  HW5: Lighting
+ *  HW4: Projections
  *  CSCI-5229 Fall 2016 Computer Graphics
  *  Instructor: Willem Schreuder
  *  Student: Bo Cao
@@ -18,7 +18,7 @@
  *  n/N        Decrease/increase shininess
  *  F1         Toggle smooth/flat shading
  *  F2         Toggle local viewer mode
- *  ,/.        Decrease/Increase light distance
+ *  F3         Toggle light distance (1/5)
  *  F8         Change ball increment
  *  F9         Invert bottom normal
  *  i/I        Toggles light movement
@@ -61,7 +61,7 @@ double asp=1;     //  Aspect ratio
 double dim=3.0;   //  Size of world
 // Light values
 int one       =   1;  // Unit value
-double distance  =   5;  // Light distance
+int distance  =   5;  // Light distance
 int inc       =  10;  // Ball increment
 int smooth    =   1;  // Smooth/Flat shading
 int local     =   0;  // Local Viewer Model
@@ -125,13 +125,8 @@ void ErrCheck(const char* where)
  */
 static void Vertex(double th,double ph)
 {
-   double x = Sin(th)*Cos(ph);
-   double y = Cos(th)*Cos(ph);
-   double z =         Sin(ph);
-   //  For a sphere at the origin, the position
-   //  and normal vectors are the same
-   glNormal3d(x,y,z);
-   glVertex3d(x,y,z);
+   glColor3f(Cos(th)*Cos(th) , Sin(ph)*Sin(ph) , Sin(th)*Sin(th));
+   glVertex3d(Sin(th)*Cos(ph) , Sin(ph) , Cos(th)*Cos(ph));
 }
 
 /*
@@ -161,42 +156,36 @@ static void cube_color(double x,double y,double z,
    glBegin(GL_QUADS);
    //  Front
    glColor3d(sr, sg, sb);
-   glNormal3f( 0, 0, 1);
    glVertex3f(-1,-1, 1);
    glVertex3f(+1,-1, 1);
    glVertex3f(+1,+1, 1);
    glVertex3f(-1,+1, 1);
    //  Back
    glColor3d(sr, sg, sb);
-   glNormal3f( 0, 0, -1);
    glVertex3f(+1,-1,-1);
    glVertex3f(-1,-1,-1);
    glVertex3f(-1,+1,-1);
    glVertex3f(+1,+1,-1);
    //  Right
    glColor3d(sr, sg, sb);
-   glNormal3f( 1, 0, 0);
    glVertex3f(+1,-1,+1);
    glVertex3f(+1,-1,-1);
    glVertex3f(+1,+1,-1);
    glVertex3f(+1,+1,+1);
    //  Left
    glColor3d(sr, sg, sb);
-   glNormal3f(-1, 0, 0);
    glVertex3f(-1,-1,-1);
    glVertex3f(-1,-1,+1);
    glVertex3f(-1,+1,+1);
    glVertex3f(-1,+1,-1);
    //  Top
    glColor3d(sr, sg, sb);
-   glNormal3f( 0, 1, 0);
    glVertex3f(-1,+1,+1);
    glVertex3f(+1,+1,+1);
    glVertex3f(+1,+1,-1);
    glVertex3f(-1,+1,-1);
    //  Bottom
    glColor3d(sr, sg, sb);
-   glNormal3f( 0, -1, 0);
    glVertex3f(-1,-1,-1);
    glVertex3f(+1,-1,-1);
    glVertex3f(+1,-1,+1);
@@ -359,6 +348,8 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     cube_color(-0.32, 0.02, 1.3, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     sphere(-0.32, 0.02, 1.3, 0.15);
+    //Shoot
+    sphere(-0.32, 0.02, 1.5 + zh / 15, 0.5);
 
     // Draw Underwear
     cube_color(0, -0.4, 0, 0.15, 0.08, 0.12, // x, y, z & dx, dy, dz
@@ -652,7 +643,6 @@ static void background()
     glPopMatrix();
 }
 
-
 /*
  *  Draw a ball
  *     at (x,y,z)
@@ -836,6 +826,8 @@ void special(int key,int x,int y)
    //  Local Viewer
    else if (key == GLUT_KEY_F2)
       local = 1-local;
+   else if (key == GLUT_KEY_F3)
+      distance = (distance==1) ? 5 : 1;
    //  Toggle ball increment
    else if (key == GLUT_KEY_F8)
       inc = (inc==10)?3:10;
@@ -899,11 +891,6 @@ void key(unsigned char ch,int x,int y)
       fov--;
    else if (ch == '+' && ch<179)
       fov++;
-   //  Change light distance
-   else if (ch == ',')
-      distance -= 0.1;
-   else if (ch == '.')
-      distance += 0.1;
    //  Light elevation
    else if (ch=='[')
       ylight -= 0.1;
@@ -981,7 +968,7 @@ int main(int argc,char* argv[])
    glutInitWindowSize(1000,800);
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    //  Create the window
-   glutCreateWindow("Bo Cao CSCI-5229 Computer Graphics Assignment 5");
+   glutCreateWindow("Bo Cao CSCI-5229 Computer Graphics Assignment 4");
    //  Tell GLUT to call "idle" when there is nothing else to do
    glutIdleFunc(idle);
    //  Tell GLUT to call "display" when the scene should be drawn

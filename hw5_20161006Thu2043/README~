@@ -55,7 +55,7 @@ Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw5'
  *  n/N        Decrease/increase shininess
  *  F1         Toggle smooth/flat shading
  *  F2         Toggle local viewer mode
- *  ,/.        Decrease/Increase light distance
+ *  F3         Toggle light distance (1/5)
  *  F8         Change ball increment
  *  F9         Invert bottom normal
  *  i/I        Toggles light movement
