@@ -287,7 +287,7 @@ void key(unsigned char ch,int x,int y)
 {
    //  Exit on ESC
    if (ch == 27)
-      exit(0);t
+      exit(0);
    //  Reset view angle
    else if (ch == '0')
       th = ph = 0;

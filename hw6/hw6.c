@@ -80,8 +80,8 @@ float ylight  =   0;  // Elevation of light
 unsigned int texture[7]; // Texture names
 
 //  Cosine and Sine in degrees
-#define Cos(x) (cos((x)*3.1415927/180))
-#define Sin(x) (sin((x)*3.1415927/180))
+// #define Cos(x) (cos((x)*3.1415927/180))
+// #define Sin(x) (sin((x)*3.1415927/180))
 
 /*
  *  Convenience routine to output raster text
@@ -187,6 +187,7 @@ static void cube_color(double x,double y,double z,
    glTexCoord2f(1,0); glVertex3f(+1,-1, 1);
    glTexCoord2f(1,1); glVertex3f(+1,+1, 1);
    glTexCoord2f(0,1); glVertex3f(-1,+1, 1);
+   glEnd();
    //  Back
    glColor3d(sr, sg, sb);
    if (ntex) glBindTexture(GL_TEXTURE_2D,texture[2]);
@@ -196,6 +197,7 @@ static void cube_color(double x,double y,double z,
    glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
    glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
    glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
+   glEnd();
    //  Right
    glColor3d(sr, sg, sb);
    if (ntex) glBindTexture(GL_TEXTURE_2D,texture[3]);
@@ -205,6 +207,7 @@ static void cube_color(double x,double y,double z,
    glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
    glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
    glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
+   glEnd();
    //  Left
    glColor3d(sr, sg, sb);
    if (ntex) glBindTexture(GL_TEXTURE_2D,texture[4]);
@@ -214,6 +217,7 @@ static void cube_color(double x,double y,double z,
    glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
    glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
    glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
+   glEnd();
    //  Top
    glColor3d(sr, sg, sb);
    if (ntex) glBindTexture(GL_TEXTURE_2D,texture[5]);
@@ -223,6 +227,7 @@ static void cube_color(double x,double y,double z,
    glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
    glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
    glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
+   glEnd();
    //  Bottom
    glColor3d(sr, sg, sb);
    if (ntex) glBindTexture(GL_TEXTURE_2D,texture[6]);
@@ -720,99 +725,6 @@ static void ball(double x,double y,double z,double r)
    glPopMatrix();
 }
 
-//new added
-/*
- *  Draw a cube
- *     at (x,y,z)
- *     dimentions (dx,dy,dz)
- *     rotated th about the y axis
- */
-static void cube(double x,double y,double z,
-                 double dx,double dy,double dz,
-                 double th)
-{
-   //  Set specular color to white
-   float white[] = {1,1,1,1};
-   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
-   glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shiny);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,white);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
-   //  Save transformation
-   glPushMatrix();
-   //  Offset, scale and rotate
-   glTranslated(x,y,z);
-   glRotated(th,0,1,0);
-   glScaled(dx,dy,dz);
-   //  Enable textures
-   glEnable(GL_TEXTURE_2D);
-   glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,mode?GL_REPLACE:GL_MODULATE);
-   glColor3f(1,1,1);
-   glBindTexture(GL_TEXTURE_2D,texture[0]);
-   //  Front
-   glColor3f(1,0,0);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[1]);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0, 1);
-   glTexCoord2f(0,0); glVertex3f(-1,-1, 1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1, 1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1, 1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1, 1);
-   glEnd();
-   //  Back
-   glColor3f(0,0,1);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[2]);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0,-1);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
-   glEnd();
-   //  Right
-   glColor3f(1,1,0);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[3]);
-   glBegin(GL_QUADS);
-   glNormal3f(+1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
-   glEnd();
-   //  Left
-   glColor3f(0,1,0);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[4]);
-   glBegin(GL_QUADS);
-   glNormal3f(-1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
-   //  Top
-   glColor3f(0,1,1);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[5]);
-   glBegin(GL_QUADS);
-   glNormal3f( 0,+1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
-   //  Bottom
-   glColor3f(1,0,1);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[6]);
-   glBegin(GL_QUADS);
-   glNormal3f( 0,-1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
-   glEnd();
-   //  Undo transformations and textures
-   glPopMatrix();
-   glDisable(GL_TEXTURE_2D);
-}
-//new added
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -876,26 +788,19 @@ void display()
    else
      glDisable(GL_LIGHTING);
 
-//new added
-//cube_color(0, -0.2, 0, 0.5, 0.5, 0.5, // x, y, z & dx, dy, dz
-//		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
-   //  Draw scene
-   cube(0,0,0 , 0.5,0.5,0.5 , 0);
-//new added
-
    //  Draw a background
-   //background();
+   background();
 
    // Draw Megaman
    if (toggleMegaman) {
-      //megaman(-1.3, 0.98, -0.5, 0.25, 0, 45, 0);
-      //megaman(0.3, 1, -1.2, 0.6, 0, 0, 0);
+      megaman(-1.3, 0.98, -0.5, 0.25, 0, 45, 0);
+      megaman(0.3, 1, -1.2, 0.6, 0, 0, 0);
    }
    
    // Draw Cutman
    if (toggleCutman) {
-      //cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
-      //cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
+      cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
+      cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
    }
 
    //  White
@@ -1132,6 +1037,16 @@ int main(int argc,char* argv[])
    //  Tell GLUT to call "key" when a key is pressed
    glutKeyboardFunc(key);
    //  Pass control to GLUT so it can interact with the user
+
+   // Load textures
+   texture[0] = LoadTexBMP("crate.bmp");
+   texture[1] = LoadTexBMP("img1.bmp");
+   texture[2] = LoadTexBMP("img2.bmp");
+   texture[3] = LoadTexBMP("img3.bmp");
+   texture[4] = LoadTexBMP("img4.bmp");
+   texture[5] = LoadTexBMP("img5.bmp");
+   texture[6] = LoadTexBMP("img6.bmp");
+
    ErrCheck("init");
    glutMainLoop();
    return 0;
