@@ -80,8 +80,13 @@ float ylight  =   0;  // Elevation of light
 unsigned int texture[7]; // Texture names
 
 //  Cosine and Sine in degrees
+<<<<<<< HEAD
 // #define Cos(x) (cos((x)*3.1415927/180))
 // #define Sin(x) (sin((x)*3.1415927/180))
+=======
+//#define Cos(x) (cos((x)*3.1415927/180))
+//#define Sin(x) (sin((x)*3.1415927/180))
+>>>>>>> bf3d557fcd96d005fb792feb133459b5ae01a80d
 
 /*
  *  Convenience routine to output raster text
