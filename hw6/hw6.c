@@ -151,7 +151,8 @@ static void Vertex(double th,double ph)
 static void cube_color(double x,double y,double z,
                  double dx,double dy,double dz,
                  double r, double g, double b,
-                 double phi, double theta, double psi)
+                 double phi, double theta, double psi,
+		 unsigned int texture)
 {
    //  Set specular color to white
    float white[] = {1,1,1,1};
@@ -172,7 +173,7 @@ static void cube_color(double x,double y,double z,
    glEnable(GL_TEXTURE_2D);
    glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,texture_mode?GL_REPLACE:GL_MODULATE);
    glColor3f(1,1,1);
-   glBindTexture(GL_TEXTURE_2D,texture[0]);
+   glBindTexture(GL_TEXTURE_2D,texture);
 
    //scale color into 255 color space
    double sr = r / 255, sg = g / 255, sb = b / 255;
@@ -180,7 +181,7 @@ static void cube_color(double x,double y,double z,
    // glBegin(GL_QUADS);
    //  Front
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[1]);
+   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
    glBegin(GL_QUADS);
    glNormal3f( 0, 0, 1);
    glTexCoord2f(0,0); glVertex3f(-1,-1, 1);
@@ -190,7 +191,7 @@ static void cube_color(double x,double y,double z,
    glEnd();
    //  Back
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[2]);
+   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
    glBegin(GL_QUADS);
    glNormal3f( 0, 0, -1);
    glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
@@ -200,7 +201,7 @@ static void cube_color(double x,double y,double z,
    glEnd();
    //  Right
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[3]);
+   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
    glBegin(GL_QUADS);
    glNormal3f( 1, 0, 0);
    glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
@@ -210,7 +211,7 @@ static void cube_color(double x,double y,double z,
    glEnd();
    //  Left
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[4]);
+   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
    glBegin(GL_QUADS);
    glNormal3f(-1, 0, 0);
    glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
@@ -220,7 +221,7 @@ static void cube_color(double x,double y,double z,
    glEnd();
    //  Top
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[5]);
+   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
    glBegin(GL_QUADS);
    glNormal3f( 0, 1, 0);
    glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
@@ -230,7 +231,7 @@ static void cube_color(double x,double y,double z,
    glEnd();
    //  Bottom
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture[6]);
+   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
    glBegin(GL_QUADS);
    glNormal3f( 0, -1, 0);
    glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
@@ -302,6 +303,7 @@ static void sphere(double x,double y,double z,double r)
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */ 
+/*
 static void megaman(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
     // Save transformation
@@ -432,6 +434,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
 
     glPopMatrix();
 }
+*/
 
 /*
  *  Draw a cutter
@@ -441,6 +444,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */ 
+/*
 static void cutter(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
     // Save transformation
@@ -474,6 +478,7 @@ static void cutter(double x, double y, double z, double ds, double phi, double t
 		255, 255, 255, 0, 0, 20); // r, g, b & phi, theta, psi
     glPopMatrix();
 }
+*/
 
 /*
  *  Draw a Cutman
@@ -483,6 +488,7 @@ static void cutter(double x, double y, double z, double ds, double phi, double t
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */ 
+/*
 static void cutman(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
     // Save transformation
@@ -615,6 +621,7 @@ static void cutman(double x, double y, double z, double ds, double phi, double t
 
     glPopMatrix();
 }
+*/
 
 /*
  * Draw a ladder
@@ -624,8 +631,10 @@ static void cutman(double x, double y, double z, double ds, double phi, double t
  *      rotated theta about the y axis
  *      rotated psi about the z axis
  */
+
 static void ladder(double x, double y, double z, double dy, double phi, double theta, double psi)
 {
+    unsigned int t_metal_grey = LoadTexBMP("metal_grey.bmp");
     // Save transformation
     glPushMatrix();
     
@@ -638,21 +647,28 @@ static void ladder(double x, double y, double z, double dy, double phi, double t
 
     // Draw left stick
     cube_color(0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
-		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
+		179, 179, 179, 0, 0, 0,	 // r, g, b & phi, theta, psi
+		t_metal_grey);
     // Draw right stick
     cube_color(-0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
-		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
+		179, 179, 179, 0, 0, 0,
+		t_metal_grey); // r, g, b & phi, theta, psi
 
     cube_color(0, 0.05, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
+		t_metal_grey); 
     cube_color(0, 0.1, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
+		t_metal_grey); 
     cube_color(0, 0.15, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
+		t_metal_grey); 
     cube_color(0, 0.2, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
+		t_metal_grey); 
     cube_color(0, 0.25, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
+		t_metal_grey); 
 
     glPopMatrix();
 }
@@ -664,26 +680,35 @@ static void ladder(double x, double y, double z, double dy, double phi, double t
  */
 static void background()
 {
+    unsigned int t_boulder = LoadTexBMP("boulder.bmp"),
+	t_ground = LoadTexBMP("ground.bmp"),
+	t_metal_grey = LoadTexBMP("metal_grey.bmp");
     // Save transformation
     glPushMatrix();
 
     // Draw a ground
     cube_color(0, -0.2, 0, 1.8, 0.2, 1.8, // x, y, z & dx, dy, dz
-		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
+		26, 255, 140, 0, 0, 0,	// r, g, b & phi, theta, psi
+   		t_ground); 
 
     // Draw cubes
     cube_color(-1, 0.2, 1, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
+		t_boulder); 
     cube_color(-1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
+		t_boulder); 
     cube_color(-1, 0.5, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
+		t_boulder); 
     cube_color(1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
+		t_boulder); 
 
     // Draw level 2 floor
     cube_color(-1.3, 0.5, -0.6, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
-		71, 209, 71, 0, 0, 0); // r, g, b & phi, theta, psi
+		71, 209, 71, 0, 0, 0,	// r, g, b & phi, theta, psi
+		t_metal_grey); 
     ladder(-0.9, -0.05, -0.22, 2, 0, 90, 0);
 
     glPopMatrix();
@@ -792,16 +817,16 @@ void display()
    background();
 
    // Draw Megaman
-   if (toggleMegaman) {
-      megaman(-1.3, 0.98, -0.5, 0.25, 0, 45, 0);
-      megaman(0.3, 1, -1.2, 0.6, 0, 0, 0);
-   }
+   //if (toggleMegaman) {
+   //   megaman(-1.3, 0.98, -0.5, 0.25, 0, 45, 0);
+   //   megaman(0.3, 1, -1.2, 0.6, 0, 0, 0);
+   //}
    
    // Draw Cutman
-   if (toggleCutman) {
-      cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
-      cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
-   }
+  // if (toggleCutman) {
+   //   cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
+    //  cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
+   //}
 
    //  White
    glColor3f(1,1,1);
@@ -1039,6 +1064,7 @@ int main(int argc,char* argv[])
    //  Pass control to GLUT so it can interact with the user
 
    // Load textures
+   /*
    texture[0] = LoadTexBMP("crate.bmp");
    texture[1] = LoadTexBMP("img1.bmp");
    texture[2] = LoadTexBMP("img2.bmp");
@@ -1046,7 +1072,7 @@ int main(int argc,char* argv[])
    texture[4] = LoadTexBMP("img4.bmp");
    texture[5] = LoadTexBMP("img5.bmp");
    texture[6] = LoadTexBMP("img6.bmp");
-
+*/
    ErrCheck("init");
    glutMainLoop();
    return 0;

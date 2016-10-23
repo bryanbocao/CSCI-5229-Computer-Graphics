@@ -1,0 +1,70 @@
+## HW6: Lighting and textures
+## CSCI-5229 Fall 2016 Computer Graphics
+## Instructor: Willem Schreuder
+## Student: Bo Cao
+## Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
+## Hours spent to complete: 8 hours
+
+Write an OpenGL program that incorporates both lighting and textures to create
+a a scene consisting of textured solid objects that can be viewed in three
+dimensions under user control.
+
+The purpose of this homework is to give you experience with textures and
+determining texture coordinates in combination with lighting.  Therefore the
+follow are not permitted:
+1) Any GLU and GLUT objects;
+2) Pyramids;
+3) Objects constructed entirely of calls to my cube or sphere functions;
+4) Objects created by Blender or a similar program and imported to the program.
+
+Note that GLUT objects do not support textures anyway.
+
+Choose your textures carefully considering the scale at which you will apply
+them.  The textures should complement the scene.  All objects in the scene
+should be textured unless there is a very good reason not to apply textures to
+some objects.
+
+Use textures that are sized as a power of two, even though it may not be
+required, because sometimes it makes a difference.  Also keep your textures
+small.  Textures greater than 512x512 are rarely justified.
+
+What to turn in:
+1) Source code, makefile and readme;
+2) Approximate time spent on the project.
+
+This assignment is the last in the series. The academic value is to give you
+some experience in using textures, lighting and three dimensional viewing to
+visualize a scene that is quite realistic.
+
+
+### To make: 
+Open Terminal or Terminator on Ubuntu, cd to the 'hw6' directory, you will see both the "hw6.c" and "makefile", enter command "make".
+
+### To run this program:
+Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw6' directory and enter command "./hw6". Or simply double click the exe file named "hw6" in the Files.
+
+ *  Key bindings:
+ *  l          Toggles lighting
+ *  t          Change textures
+ *  T          Toggles texture mode modulate/replace
+ *  a/A        Decrease/increase ambient light
+ *  d/D        Decrease/increase diffuse light
+ *  s/S        Decrease/increase specular light
+ *  e/E        Decrease/increase emitted light
+ *  n/N        Decrease/increase shininess
+ *  F1         Toggle smooth/flat shading
+ *  F2         Toggle local viewer mode
+ *  ,/.        Decrease/Increase light distance
+ *  F8         Change ball increment
+ *  F9         Invert bottom normal
+ *  i/I        Toggles light movement
+ *  []         Lower/rise light
+ *  p/P        Toggles ortogonal/perspective projection
+ *  +/-        Change field of view of perspective
+ *  x/X        Toggle axes
+ *  PgDn/PgUp  Zoom in and out
+ *  m/M        Toggle Megaman
+ *  c/C        Toggle Cutman
+ *  arrows     Change view angle
+ *  0          Reset view angle
+ *  ESC        Exit
