@@ -3,7 +3,7 @@
 ## Instructor: Willem Schreuder
 ## Student: Bo Cao
 ## Email: boca7588@colorado.edu or bo.cao-1@colorado.edu
-## Hours spent to complete: 6 hours
+## Hours spent to complete: 8 hours
 
 Write an OpenGL program that incorporates both lighting and textures to create
 a a scene consisting of textured solid objects that can be viewed in three
@@ -43,4 +43,27 @@ Open Terminal or Terminator on Ubuntu, cd to the 'hw6' directory, you will see b
 ### To run this program:
 Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw6' directory and enter command "./hw6". Or simply double click the exe file named "hw6" in the Files.
 
-  ESC        Exit
+ *  l          Toggles lighting
+ *  t          Change textures
+ *  T          Toggles texture mode modulate/replace
+ *  a/A        Decrease/increase ambient light
+ *  d/D        Decrease/increase diffuse light
+ *  s/S        Decrease/increase specular light
+ *  e/E        Decrease/increase emitted light
+ *  n/N        Decrease/increase shininess
+ *  F1         Toggle smooth/flat shading
+ *  F2         Toggle local viewer mode
+ *  ,/.        Decrease/Increase light distance
+ *  F8         Change ball increment
+ *  F9         Invert bottom normal
+ *  i/I        Toggles light movement
+ *  []         Lower/rise light
+ *  p/P        Toggles ortogonal/perspective projection
+ *  +/-        Change field of view of perspective
+ *  x/X        Toggle axes
+ *  PgDn/PgUp  Zoom in and out
+ *  m/M        Toggle Megaman
+ *  c/C        Toggle Cutman
+ *  arrows     Change view angle
+ *  0          Reset view angle
+ *  ESC        Exit
