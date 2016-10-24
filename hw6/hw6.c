@@ -311,7 +311,8 @@ static void head_texture(double x,double y,double z,
     unsigned int t_metal_blue = LoadTexBMP("metal_blue.bmp"),
 	t_metal_grey = LoadTexBMP("metal_grey.bmp"),
 	t_face = LoadTexBMP("face.bmp"),
-	t_blue = LoadTexBMP("blue.bmp");
+	t_blue = LoadTexBMP("blue.bmp"),
+	t_red = LoadTexBMP("red.bmp");
    //  Set specular color to white
    float white[] = {1,1,1,1};
    float Emission[]  = {0.0,0.0,0.01*emission,1.0};
@@ -419,8 +420,8 @@ static void head_texture(double x,double y,double z,
    glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
    glTexCoord2f(0,1); glVertex3f(-2,0,0);
    glEnd();
-   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
-   sphere(-1.8, 0, 0, 0.3);
+   glBindTexture(GL_TEXTURE_2D,t_red);
+   sphere(-1.8, 0, 0, 0.2);
 
    //  Right helmet bottom
    glBindTexture(GL_TEXTURE_2D,t_metal_blue);
@@ -451,8 +452,8 @@ static void head_texture(double x,double y,double z,
    glTexCoord2f(1,1); glVertex3f(1,+1,-1);
    glTexCoord2f(0,1); glVertex3f(2,0,0);
    glEnd();
-   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
-   sphere(1.8, 0, 0, 0.3);
+   glBindTexture(GL_TEXTURE_2D,t_red);
+   sphere(1.8, 0, 0, 0.2);
 
    // top helmet
    //  Front
@@ -511,6 +512,163 @@ static void head_texture(double x,double y,double z,
    glTexCoord2f(0,1); glVertex3f(1.5,2,+1);
    glEnd();
    
+   //body
+   //  Front
+   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
+   glBegin(GL_QUADS);
+   glNormal3f( 0, 0, 1);
+   glTexCoord2f(0,0); glVertex3f(-0.5,-1, 0.5);
+   glTexCoord2f(1,0); glVertex3f(-0.5,-2, 0.5);
+   glTexCoord2f(1,1); glVertex3f(0.5,-2, 0.5);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1, 0.5);
+   glEnd();
+   //  Back
+   glBegin(GL_QUADS);
+   glNormal3f( 0, 0, -1);
+   glTexCoord2f(0,0); glVertex3f(-0.5,-1, -0.5);
+   glTexCoord2f(1,0); glVertex3f(-0.5,-2, -0.5);
+   glTexCoord2f(1,1); glVertex3f(0.5,-2, -0.5);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1, -0.5);
+   glEnd();
+   //  Right
+   glBegin(GL_QUADS);
+   glNormal3f( 1, 0, 0);
+   glTexCoord2f(0,0); glVertex3f(0.5,-1, -0.5);
+   glTexCoord2f(1,0); glVertex3f(0.5,-2, -0.5);
+   glTexCoord2f(1,1); glVertex3f(0.5,-2, 0.5);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1, 0.5);
+   glEnd();
+   //  Left
+   glBegin(GL_QUADS);
+   glNormal3f(-1, 0, 0);
+   glTexCoord2f(0,0); glVertex3f(-0.5,-1, -0.5);
+   glTexCoord2f(1,0); glVertex3f(-0.5,-2, -0.5);
+   glTexCoord2f(1,1); glVertex3f(-0.5,-2, 0.5);
+   glTexCoord2f(0,1); glVertex3f(-0.5,-1, 0.5);
+   glEnd();
+   //underwear
+   glBindTexture(GL_TEXTURE_2D,t_blue);
+   //underwear front
+   glBegin(GL_TRIANGLES);
+   glNormal3f( 0, -1, 1);
+   glTexCoord2f(0,0); glVertex3f(-0.5,-2,0.5);
+   glTexCoord2f(1,0); glVertex3f(+0.5,-2,0.5);
+   glTexCoord2f(1,1); glVertex3f(0,-2.5,0);
+   glEnd();
+   //underwear back
+   glBegin(GL_TRIANGLES);
+   glNormal3f( 0, -1, -1);
+   glTexCoord2f(0,0); glVertex3f(-0.5,-2,-0.5);
+   glTexCoord2f(1,0); glVertex3f(+0.5,-2,-0.5);
+   glTexCoord2f(1,1); glVertex3f(0,-2.5,0);
+   glEnd();
+   //underwear left
+   glBegin(GL_TRIANGLES);
+   glNormal3f( -1, -1, 0);
+   glTexCoord2f(0,0); glVertex3f(-0.5,-2,-0.5);
+   glTexCoord2f(1,0); glVertex3f(-0.5,-2,0.5);
+   glTexCoord2f(1,1); glVertex3f(0,-2.5,0);
+   glEnd();
+   //underwear right
+   glBegin(GL_TRIANGLES);
+   glNormal3f( 1, -1, 0);
+   glTexCoord2f(0,0); glVertex3f(0.5,-2,-0.5);
+   glTexCoord2f(1,0); glVertex3f(0.5,-2,0.5);
+   glTexCoord2f(1,1); glVertex3f(0,-2.5,0);
+   glEnd();
+
+   //left arm
+   glBindTexture(GL_TEXTURE_2D,t_blue);
+   //left front arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, 0, 1);
+   glTexCoord2f(1,1); glVertex3f(-0.5,-1.2,0.3);
+   glTexCoord2f(0,1); glVertex3f(-0.5,-1.8,0.3);
+   glTexCoord2f(0,0); glVertex3f(-2,-1.8,0.3);
+   glTexCoord2f(1,0); glVertex3f(-2,-1.2,0.3);
+   glEnd();
+   //left back arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, 0, -1);
+   glTexCoord2f(1,1); glVertex3f(-0.5,-1.2,-0.3);
+   glTexCoord2f(0,1); glVertex3f(-0.5,-1.8,-0.3);
+   glTexCoord2f(0,0); glVertex3f(-2,-1.8,-0.3);
+   glTexCoord2f(1,0); glVertex3f(-2,-1.2,-0.3);
+   glEnd();
+   //left top arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, 1, 0);
+   glTexCoord2f(1,1); glVertex3f(-0.5,-1.2,-0.3);
+   glTexCoord2f(0,1); glVertex3f(-0.5,-1.2,0.3);
+   glTexCoord2f(0,0); glVertex3f(-2,-1.2,0.3);
+   glTexCoord2f(1,0); glVertex3f(-2,-1.2,-0.3);
+   glEnd();
+   //left down arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, -1, 0);
+   glTexCoord2f(1,1); glVertex3f(-0.5,-1.8,-0.3);
+   glTexCoord2f(0,1); glVertex3f(-0.5,-1.8,0.3);
+   glTexCoord2f(0,0); glVertex3f(-2,-1.8,0.3);
+   glTexCoord2f(1,0); glVertex3f(-2,-1.8,-0.3);
+   glEnd();
+   //left left arm
+   glBegin(GL_QUADS);
+   glNormal3f(-1, 0, 0);
+   glTexCoord2f(1,1); glVertex3f(-2,-1.2,-0.3);
+   glTexCoord2f(0,1); glVertex3f(-2,-1.2,0.3);
+   glTexCoord2f(0,0); glVertex3f(-2,-1.8,0.3);
+   glTexCoord2f(1,0); glVertex3f(-2,-1.8,-0.3);
+   glEnd();
+   sphere(-2, -1.5, 0, 0.3);
+
+   //right arm
+   glBindTexture(GL_TEXTURE_2D,t_blue);
+   //right front arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, 0, 1);
+   glTexCoord2f(1,1); glVertex3f(0.5,-1.2,0.3);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1.8,0.3);
+   glTexCoord2f(0,0); glVertex3f(2,-1.8,0.3);
+   glTexCoord2f(1,0); glVertex3f(2,-1.2,0.3);
+   glEnd();
+   //right back arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, 0, -1);
+   glTexCoord2f(1,1); glVertex3f(0.5,-1.2,-0.3);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1.8,-0.3);
+   glTexCoord2f(0,0); glVertex3f(2,-1.8,-0.3);
+   glTexCoord2f(1,0); glVertex3f(2,-1.2,-0.3);
+   glEnd();
+   //right top arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, 1, 0);
+   glTexCoord2f(1,1); glVertex3f(0.5,-1.2,-0.3);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1.2,0.3);
+   glTexCoord2f(0,0); glVertex3f(2,-1.2,0.3);
+   glTexCoord2f(1,0); glVertex3f(2,-1.2,-0.3);
+   glEnd();
+   //right down arm
+   glBegin(GL_QUADS);
+   glNormal3f(0, -1, 0);
+   glTexCoord2f(1,1); glVertex3f(0.5,-1.8,-0.3);
+   glTexCoord2f(0,1); glVertex3f(0.5,-1.8,0.3);
+   glTexCoord2f(0,0); glVertex3f(2,-1.8,0.3);
+   glTexCoord2f(1,0); glVertex3f(2,-1.8,-0.3);
+   glEnd();
+   //right left arm
+   glBegin(GL_QUADS);
+   glNormal3f(-1, 0, 0);
+   glTexCoord2f(1,1); glVertex3f(2,-1.2,-0.3);
+   glTexCoord2f(0,1); glVertex3f(2,-1.2,0.3);
+   glTexCoord2f(0,0); glVertex3f(2,-1.8,0.3);
+   glTexCoord2f(1,0); glVertex3f(2,-1.8,-0.3);
+   glEnd();
+   sphere(2, -1.5, 0, 0.3);
+
+
+   //  end of body
+
+
 
 
    //  Undo transformations
@@ -529,7 +687,8 @@ static void head_texture(double x,double y,double z,
 
 static void megaman(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
-    unsigned int t_metal_grey = LoadTexBMP("metal_grey.bmp");
+    unsigned int t_metal_grey = LoadTexBMP("metal_grey.bmp"),
+	t_blue = LoadTexBMP("blue.bmp");
     // Save transformation
     glPushMatrix();
 
@@ -544,20 +703,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     head_texture(0, 0.58, 0, 
 	0.45, 0.45, 0.45,
 	0, 0, 0);
-
     
-    // Draw Neck
-    /*
-    cube_color(0, 0.2, 0, 0.1, 0.05, 0.1, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi    
-*/
-    // Draw Body
-    /*
-    cube_color(0, 0, 0, 0.25, 0.2, 0.15, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    cube_color(0, -0.27, 0, 0.19, 0.07, 0.1, // x, y, z & dx, dy, dz
-		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    */
     // Draw Arms
     // Draw Left Arm
     /*
@@ -570,7 +716,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     cube_color(1.6, 0.02, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
 */
-    sphere(1.6, 0.02, 0, 0.15);
+   // sphere(1.6, 0.02, 0, 0.15);
 
     // Draw Right Arm
     /*
@@ -583,7 +729,7 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     cube_color(-0.32, 0.02, 1.3, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     */
-    sphere(-0.32, 0.02, 1.3, 0.15);
+   // sphere(-0.32, 0.02, 1.3, 0.15);
 
     // Draw Underwear
     /*
