@@ -44,9 +44,9 @@ Open Terminal or Terminator on Ubuntu, cd to the 'hw6' directory, you will see b
 Open Terminal or Terminator on Ubuntu, after "make" process, cd to the the 'hw6' directory and enter command "./hw6". Or simply double click the exe file named "hw6" in the Files.
 
  *  Key bindings:
+ *  1/2        Change repeat
  *  l          Toggles lighting
  *  t          Change textures
- *  T          Toggles texture mode modulate/replace
  *  a/A        Decrease/increase ambient light
  *  d/D        Decrease/increase diffuse light
  *  s/S        Decrease/increase specular light
