@@ -1,5 +1,5 @@
 /*
- *  HW6: Lighting and textures
+ *  HW5: Lighting
  *  CSCI-5229 Fall 2016 Computer Graphics
  *  Instructor: Willem Schreuder
  *  Student: Bo Cao
@@ -11,8 +11,6 @@
  *
  *  Key bindings:
  *  l          Toggles lighting
- *  t          Change textures
- *  T          Toggles texture mode modulate/replace
  *  a/A        Decrease/increase ambient light
  *  d/D        Decrease/increase diffuse light
  *  s/S        Decrease/increase specular light
@@ -47,7 +45,6 @@
 #include <GL/glut.h>
 #endif
 
-#include "CSCIx229.h"
 int th=-55;         //  Azimuth of view angle
 int ph=10;         //  Elevation of view angle
 double zh=0;      //  Rotation of teapot
@@ -56,8 +53,6 @@ int toggleMegaman = 1; // 　Display megaman
 int toggleCutman = 1; // 　Display cutman
 
 int axes=1;       //  Display axes
-int texture_mode=0;       //  Texture mode
-int ntex=0;       //  Cube faces
 int mode=1;       //  Projection mode
 int move=1;       //  Move light
 int fov=55;       //  Field of view (for perspective)
@@ -77,11 +72,10 @@ int specular  =   0;  // Specular intensity (%)
 int shininess =   0;  // Shininess (power of two)
 float shiny   =   1;  // Shininess (value)
 float ylight  =   0;  // Elevation of light
-unsigned int texture[7]; // Texture names
 
 //  Cosine and Sine in degrees
-// #define Cos(x) (cos((x)*3.1415927/180))
-// #define Sin(x) (sin((x)*3.1415927/180))
+#define Cos(x) (cos((x)*3.1415927/180))
+#define Sin(x) (sin((x)*3.1415927/180))
 
 /*
  *  Convenience routine to output raster text
@@ -141,25 +135,18 @@ static void Vertex(double th,double ph)
 }
 
 /*
- *  Draw a cube with color space 0 ~ 255 from (r, g, b) and texture
+ *  Draw a cube with color space 0 ~ 255 from (r, g, b)
  *     at (x,y,z)
  *     dimentions (dx,dy,dz)
  *     rotated phi about the x axis
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */
-static void cube_color_texture(double x,double y,double z,
+static void cube_color(double x,double y,double z,
                  double dx,double dy,double dz,
                  double r, double g, double b,
-                 double phi, double theta, double psi,
-		 unsigned int texture)
+                 double phi, double theta, double psi)
 {
-   //  Set specular color to white
-   float white[] = {1,1,1,1};
-   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
-   glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shiny);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,white);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
    //  Save transformation
    glPushMatrix();
    //  Offset
@@ -168,81 +155,56 @@ static void cube_color_texture(double x,double y,double z,
    glRotated(theta,0,1,0);
    glRotated(psi,0,0,1);
    glScaled(dx,dy,dz);
-
-   //  Enable textures
-   glEnable(GL_TEXTURE_2D);
-   glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,texture_mode?GL_REPLACE:GL_MODULATE);
-   glColor3f(1,1,1);
-   glBindTexture(GL_TEXTURE_2D,texture);
-
    //scale color into 255 color space
    double sr = r / 255, sg = g / 255, sb = b / 255;
    //  Cube
-   // glBegin(GL_QUADS);
+   glBegin(GL_POLYGON);
    //  Front
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
-   glBegin(GL_QUADS);
    glNormal3f( 0, 0, 1);
-   glTexCoord2f(0,0); glVertex3f(-1,-1, 1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1, 1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1, 1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1, 1);
-   glEnd();
+   glVertex3f(-1,-1, 1);
+   glVertex3f(+1,-1, 1);
+   glVertex3f(+1,+1, 1);
+   glVertex3f(-1,+1, 1);
    //  Back
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
-   glBegin(GL_QUADS);
    glNormal3f( 0, 0, -1);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
-   glEnd();
+   glVertex3f(+1,-1,-1);
+   glVertex3f(-1,-1,-1);
+   glVertex3f(-1,+1,-1);
+   glVertex3f(+1,+1,-1);
    //  Right
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
-   glBegin(GL_QUADS);
    glNormal3f( 1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
-   glEnd();
+   glVertex3f(+1,-1,+1);
+   glVertex3f(+1,-1,-1);
+   glVertex3f(+1,+1,-1);
+   glVertex3f(+1,+1,+1);
    //  Left
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
-   glBegin(GL_QUADS);
    glNormal3f(-1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
+   glVertex3f(-1,-1,-1);
+   glVertex3f(-1,-1,+1);
+   glVertex3f(-1,+1,+1);
+   glVertex3f(-1,+1,-1);
    //  Top
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
-   glBegin(GL_QUADS);
    glNormal3f( 0, 1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
+   glVertex3f(-1,+1,+1);
+   glVertex3f(+1,+1,+1);
+   glVertex3f(+1,+1,-1);
+   glVertex3f(-1,+1,-1);
    //  Bottom
    glColor3d(sr, sg, sb);
-   if (ntex) glBindTexture(GL_TEXTURE_2D,texture);
-   glBegin(GL_QUADS);
    glNormal3f( 0, -1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
+   glVertex3f(-1,-1,-1);
+   glVertex3f(+1,-1,-1);
+   glVertex3f(+1,-1,+1);
+   glVertex3f(-1,-1,+1);
    //  End
    glEnd();
    //  Undo transformations
    glPopMatrix();
-   glDisable(GL_TEXTURE_2D);
 }
 
 /*
@@ -296,229 +258,6 @@ static void sphere(double x,double y,double z,double r)
 }
 
 /*
- *  Draw a head with texture
- *     at (x,y,z)
- *     dimentions (dx,dy,dz)
- *     rotated phi about the x axis
- *     rotated theta about the y axis
- *     rotated psi about the z axis
- */
-static void head_texture(double x,double y,double z,
-                 double dx,double dy,double dz,
-                 double phi, double theta, double psi)
-{
-
-    unsigned int t_metal_blue = LoadTexBMP("metal_blue.bmp"),
-	t_metal_grey = LoadTexBMP("metal_grey.bmp"),
-	t_face = LoadTexBMP("face.bmp"),
-	t_blue = LoadTexBMP("blue.bmp");
-   //  Set specular color to white
-   float white[] = {1,1,1,1};
-   float Emission[]  = {0.0,0.0,0.01*emission,1.0};
-   glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,shiny);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,white);
-   glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,Emission);
-   //  Save transformation
-   glPushMatrix();
-   //  Offset
-   glTranslated(x,y,z);
-   glRotated(phi,1,0,0);
-   glRotated(theta,0,1,0);
-   glRotated(psi,0,0,1);
-   glScaled(dx,dy,dz);
-
-   //  Enable textures
-   glEnable(GL_TEXTURE_2D);
-   glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,texture_mode?GL_REPLACE:GL_MODULATE);
-   glColor3f(1,1,1);
-   glBindTexture(GL_TEXTURE_2D,t_face);
-
-   //  Head Cube
-   //  Front
-   glBindTexture(GL_TEXTURE_2D,t_face);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0, 1);
-   glTexCoord2f(0,0); glVertex3f(-1,-1, 1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1, 1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1, 1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1, 1);
-   glEnd();
-   //  Back
-   glBindTexture(GL_TEXTURE_2D,t_metal_blue);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0, -1);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,-1);
-   glEnd();
-   //  Right
-   glBegin(GL_QUADS);
-   glNormal3f( 1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(+1,-1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
-   glEnd();
-   //  Left
-   glBegin(GL_QUADS);
-   glNormal3f(-1, 0, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
-   //  Top
-   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,+1,+1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glEnd();
-   //  Bottom
-   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, -1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(+1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,-1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,-1,+1);
-   //  End
-   glEnd();
-   //  end of Head Cube
-
-   // draw helmet
-   //  Left helmet bottom
-   glBindTexture(GL_TEXTURE_2D,t_metal_blue);
-   glBegin(GL_TRIANGLES);
-   glNormal3f(-1, -1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(-2,0,0);
-   glEnd();
-   //  Left helmet front
-   glBegin(GL_TRIANGLES);
-   glNormal3f(-1, 0, 1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-2,0,0);
-   glEnd();
-   //  Left helmet top
-   glBegin(GL_TRIANGLES);
-   glNormal3f( -1, 1, 0);
-   glTexCoord2f(0,0); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-2,0,0);
-   glEnd();
-   //  Left helmet back
-   glBegin(GL_TRIANGLES);
-   glNormal3f( -1, 0, -1);
-   glTexCoord2f(1,0); glVertex3f(-1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-2,0,0);
-   glEnd();
-   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
-   sphere(-1.8, 0, 0, 0.3);
-
-   //  Right helmet bottom
-   glBindTexture(GL_TEXTURE_2D,t_metal_blue);
-   glBegin(GL_TRIANGLES);
-   glNormal3f(1, -1, 0);
-   glTexCoord2f(0,0); glVertex3f(1,-1,-1);
-   glTexCoord2f(1,0); glVertex3f(1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(2,0,0);
-   glEnd();
-   //  Right helmet front
-   glBegin(GL_TRIANGLES);
-   glNormal3f(1, 0, 1);
-   glTexCoord2f(1,0); glVertex3f(1,-1,+1);
-   glTexCoord2f(1,1); glVertex3f(1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(2,0,0);
-   glEnd();
-   //  Right helmet top
-   glBegin(GL_TRIANGLES);
-   glNormal3f( 1, 1, 0);
-   glTexCoord2f(0,0); glVertex3f(1,+1,+1);
-   glTexCoord2f(0,1); glVertex3f(1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(2,0,0);
-   glEnd();
-   //  Right helmet back
-   glBegin(GL_TRIANGLES);
-   glNormal3f( 1, 0, -1);
-   glTexCoord2f(1,0); glVertex3f(1,-1,-1);
-   glTexCoord2f(1,1); glVertex3f(1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(2,0,0);
-   glEnd();
-   glBindTexture(GL_TEXTURE_2D,t_metal_grey);
-   sphere(1.8, 0, 0, 0.3);
-
-   // top helmet
-   //  Front
-   glBindTexture(GL_TEXTURE_2D,t_metal_blue);
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0, 1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1, 1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1, 1);
-   glTexCoord2f(1,1); glVertex3f(-1,+1.5, 1);
-   glTexCoord2f(0,1); glVertex3f(1,+1.5, 1);
-   glEnd();
-   //  Back
-   glBegin(GL_QUADS);
-   glNormal3f( 0, 0, -1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(1,0); glVertex3f(+1,+1,-1);
-   glTexCoord2f(1,1); glVertex3f(+1,+1.5,-1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1.5,-1);
-   glEnd();
-   //  Right
-   glBegin(GL_QUADS);
-   glNormal3f( 1, 0, 0);
-   glTexCoord2f(1,1); glVertex3f(+1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(+1,+1,+1);
-   glTexCoord2f(0,0); glVertex3f(+1,+1.5,+1);
-   glTexCoord2f(1,0); glVertex3f(+1,+1.5,-1);
-   glEnd();
-   //  Left
-   glBegin(GL_QUADS);
-   glNormal3f(-1, 0, 0);
-   glTexCoord2f(1,1); glVertex3f(-1,+1,-1);
-   glTexCoord2f(0,1); glVertex3f(-1,+1,+1);
-   glTexCoord2f(0,0); glVertex3f(-1,+1.5,+1);
-   glTexCoord2f(1,0); glVertex3f(-1,+1.5,-1);
-   glEnd();
-   //  Top front
-   glBegin(GL_TRIANGLES);
-   glNormal3f(0, 1, 1);
-   glTexCoord2f(1,0); glVertex3f(1,1.5,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,1.5,+1);
-   glTexCoord2f(0,1); glVertex3f(0,2.5,0);
-   glEnd();
-   // top front star
-   glBindTexture(GL_TEXTURE_2D,t_blue);
-   glBegin(GL_TRIANGLES);
-   glNormal3f(0, 1, 1);
-   glTexCoord2f(1,0); glVertex3f(0,1.5,+1);
-   glTexCoord2f(1,1); glVertex3f(-1,1.5,+1);
-   glTexCoord2f(0,1); glVertex3f(-1.5,2,+1);
-   glEnd();
-
-   glBegin(GL_TRIANGLES);
-   glNormal3f(0, 1, 1);
-   glTexCoord2f(1,0); glVertex3f(1,1.5,+1);
-   glTexCoord2f(1,1); glVertex3f(0,1.5,+1);
-   glTexCoord2f(0,1); glVertex3f(1.5,2,+1);
-   glEnd();
-   
-
-
-   //  Undo transformations
-   glPopMatrix();
-   glDisable(GL_TEXTURE_2D);
-}
-
-/*
  *  Draw a Megaman
  *     at (x, y, z)
  *     scale (ds)
@@ -526,10 +265,8 @@ static void head_texture(double x,double y,double z,
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */ 
-
 static void megaman(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
-    unsigned int t_metal_grey = LoadTexBMP("metal_grey.bmp");
     // Save transformation
     glPushMatrix();
 
@@ -541,26 +278,67 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
     glScaled(ds, ds, ds);
 
     // Head
-    head_texture(0, 0.58, 0, 
-	0.45, 0.45, 0.45,
-	0, 0, 0);
+    cube_color(0, 0.58, 0, 0.45, 0.45, 0.45, // x, y, z & dx, dy, dz
+		256, 256, 256, 0, 0, 0); // r, g, b & phi, theta, psi 
 
-    
+    // Helmet
+    // Top
+    cube_color(0, 1.1, -0.03, 0.47, 0.13, 0.47, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.3, -0.06, 0.36, 0.1, 0.36, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1, 0.45, 0.08, 0.1, 0.01, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi  
+    cube_color(0, 1.22, 0.4, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.45, -0.1, 0.1, 0.1, 0.3, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.32, -0.46, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1.16, -0.56, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 1, -0.68, 0.1, 0.1, 0.1, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Left
+    cube_color(0.5, 0.6, 0, 0.07, 0.45, 0.45, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0.6, 0.6, -0.1, 0.07, 0.2, 0.2, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Right
+    cube_color(-0.5, 0.6, 0, 0.07, 0.45, 0.45, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-0.6, 0.6, -0.1, 0.07, 0.2, 0.2, // x, y, z & dx, dy, dz
+		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    // Back
+    cube_color(0, 0.6, -0.5, 0.45, 0.45, 0.07, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.6, -0.6, 0.4, 0.4, 0.07, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.6, -0.7, 0.3, 0.3, 0.07, // x, y, z & dx, dy, dz
+		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
+ 
+    // Eyes
+    cube_color(0.2, 0.62, 0.45, 0.05, 0.2, 0.01, // x, y, z & dx, dy, dz
+		0, 0, 0, 0, 0, 0); // r, g, b & phi, theta, psi  
+    cube_color(-0.2, 0.62, 0.45, 0.05, 0.2, 0.01, // x, y, z & dx, dy, dz
+		0, 0, 0, 0, 0, 0); // r, g, b & phi, theta, psi 
+
+    // Mouth
+    cube_color(0, 0.25, 0.48, 0.2, 0.05, 0.01, // x, y, z & dx, dy, dz
+		0, 0, 0, 0, 0, 0); // r, g, b & phi, theta, psi     
+
     // Draw Neck
-    
     cube_color(0, 0.2, 0, 0.1, 0.05, 0.1, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi    
 
     // Draw Body
-    /*
     cube_color(0, 0, 0, 0.25, 0.2, 0.15, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(0, -0.27, 0, 0.19, 0.07, 0.1, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    */
+    
     // Draw Arms
     // Draw Left Arm
-    /*
     cube_color(0.54, 0.02, 0, 0.3, 0.08, 0.08, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(0.85, 0.02, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
@@ -569,11 +347,9 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(1.6, 0.02, 0, 0.05, 0.15, 0.15, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-*/
     sphere(1.6, 0.02, 0, 0.15);
 
     // Draw Right Arm
-    /*
     cube_color(-0.32, 0.02, 0.2, 0.08, 0.08, 0.3, // x, y, z & dx, dy, dz
 		102, 217, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(-0.32, 0.02, 0.55, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
@@ -582,17 +358,14 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
     cube_color(-0.32, 0.02, 1.3, 0.15, 0.15, 0.05, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-    */
     sphere(-0.32, 0.02, 1.3, 0.15);
 
     // Draw Underwear
-    /*
     cube_color(0, -0.4, 0, 0.15, 0.08, 0.12, // x, y, z & dx, dy, dz
 		77, 148, 255, 0, 0, 0); // r, g, b & phi, theta, psi
-*/
+
     // Draw Legs
     // Draw Left Leg
-    /*
     cube_color(0.15, -0.6, 0, 0.08, 0.17, 0.08, // x, y, z & dx, dy, dz
 		77, 195, 255, 0, 0, 25); // r, g, b & phi, theta, psi
     cube_color(0.25, -0.8, 0, 0.14, 0.08, 0.14, // x, y, z & dx, dy, dz
@@ -605,9 +378,8 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
 		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
     cube_color(0.65, -1.6, 0.1, 0.5, 0.1, 0.5, // x, y, z & dx, dy, dz
 		26, 117, 255, 0, 0, 25); // r, g, b & phi, theta, psi
-*/
+
     // Draw Right Leg
-    /*
     cube_color(-0.15, -0.6, 0, 0.08, 0.17, 0.08, // x, y, z & dx, dy, dz
 		77, 195, 255, 0, 0, -25); // r, g, b & phi, theta, psi
     cube_color(-0.25, -0.8, 0, 0.14, 0.08, 0.14, // x, y, z & dx, dy, dz
@@ -620,10 +392,9 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
 		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
     cube_color(-0.65, -1.6, 0.1, 0.5, 0.1, 0.5, // x, y, z & dx, dy, dz
 		26, 117, 255, 0, 0, -25); // r, g, b & phi, theta, psi
-    */
+
     glPopMatrix();
 }
-
 
 /*
  *  Draw a cutter
@@ -633,7 +404,6 @@ static void megaman(double x, double y, double z, double ds, double phi, double 
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */ 
-/*
 static void cutter(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
     // Save transformation
@@ -667,7 +437,6 @@ static void cutter(double x, double y, double z, double ds, double phi, double t
 		255, 255, 255, 0, 0, 20); // r, g, b & phi, theta, psi
     glPopMatrix();
 }
-*/
 
 /*
  *  Draw a Cutman
@@ -677,7 +446,6 @@ static void cutter(double x, double y, double z, double ds, double phi, double t
  *     rotated theta about the y axis
  *     rotated psi about the z axis
  */ 
-/*
 static void cutman(double x, double y, double z, double ds, double phi, double theta, double psi)
 {
     // Save transformation
@@ -810,7 +578,6 @@ static void cutman(double x, double y, double z, double ds, double phi, double t
 
     glPopMatrix();
 }
-*/
 
 /*
  * Draw a ladder
@@ -820,10 +587,8 @@ static void cutman(double x, double y, double z, double ds, double phi, double t
  *      rotated theta about the y axis
  *      rotated psi about the z axis
  */
-
 static void ladder(double x, double y, double z, double dy, double phi, double theta, double psi)
 {
-    unsigned int t_metal_grey = LoadTexBMP("metal_grey.bmp");
     // Save transformation
     glPushMatrix();
     
@@ -835,29 +600,22 @@ static void ladder(double x, double y, double z, double dy, double phi, double t
     glScaled(1, dy, 1);
 
     // Draw left stick
-    cube_color_texture(0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
-		179, 179, 179, 0, 0, 0,	 // r, g, b & phi, theta, psi
-		t_metal_grey);
+    cube_color(0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
+		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
     // Draw right stick
-    cube_color_texture(-0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
-		179, 179, 179, 0, 0, 0,
-		t_metal_grey); // r, g, b & phi, theta, psi
+    cube_color(-0.15, 0.15, 0, 0.02, 0.15, 0.02, // x, y, z & dx, dy, dz
+		179, 179, 179, 0, 0, 0); // r, g, b & phi, theta, psi
 
-    cube_color_texture(0, 0.05, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
-		t_metal_grey); 
-    cube_color_texture(0, 0.1, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
-		t_metal_grey); 
-    cube_color_texture(0, 0.15, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
-		t_metal_grey); 
-    cube_color_texture(0, 0.2, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
-		t_metal_grey); 
-    cube_color_texture(0, 0.25, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
-		204, 204, 204, 0, 0, 0,// r, g, b & phi, theta, psi
-		t_metal_grey); 
+    cube_color(0, 0.05, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.1, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.15, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.2, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(0, 0.25, 0, 0.15, 0.005, 0.02, // x, y, z & dx, dy, dz
+		204, 204, 204, 0, 0, 0); // r, g, b & phi, theta, psi
 
     glPopMatrix();
 }
@@ -869,35 +627,26 @@ static void ladder(double x, double y, double z, double dy, double phi, double t
  */
 static void background()
 {
-    unsigned int t_boulder = LoadTexBMP("boulder.bmp"),
-	t_ground = LoadTexBMP("ground.bmp"),
-	t_metal_grey = LoadTexBMP("metal_grey.bmp");
     // Save transformation
     glPushMatrix();
 
     // Draw a ground
-    cube_color_texture(0, -0.2, 0, 1.8, 0.2, 1.8, // x, y, z & dx, dy, dz
-		26, 255, 140, 0, 0, 0,	// r, g, b & phi, theta, psi
-   		t_ground); 
+    cube_color(0, -0.2, 0, 1.8, 0.2, 1.8, // x, y, z & dx, dy, dz
+		26, 255, 140, 0, 0, 0); // r, g, b & phi, theta, psi
 
     // Draw cubes
-    cube_color_texture(-1, 0.2, 1, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
-		t_boulder); 
-    cube_color_texture(-1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
-		t_boulder); 
-    cube_color_texture(-1, 0.5, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
-		t_boulder); 
-    cube_color_texture(1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
-		46, 184, 46, 0, 0, 0,	// r, g, b & phi, theta, psi
-		t_boulder); 
+    cube_color(-1, 0.2, 1, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(-1, 0.5, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
+    cube_color(1, 0.2, 1.5, 0.2, 0.2, 0.2, // x, y, z & dx, dy, dz
+		46, 184, 46, 0, 0, 0); // r, g, b & phi, theta, psi
 
     // Draw level 2 floor
-    cube_color_texture(-1.3, 0.5, -0.6, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
-		71, 209, 71, 0, 0, 0,	// r, g, b & phi, theta, psi
-		t_metal_grey); 
+    cube_color(-1.3, 0.5, -0.6, 0.4, 0.05, 1, // x, y, z & dx, dy, dz
+		71, 209, 71, 0, 0, 0); // r, g, b & phi, theta, psi
     ladder(-0.9, -0.05, -0.22, 2, 0, 90, 0);
 
     glPopMatrix();
@@ -938,7 +687,6 @@ static void ball(double x,double y,double z,double r)
    //  Undo transofrmations
    glPopMatrix();
 }
-
 
 /*
  *  OpenGL (GLUT) calls this routine to display the scene
@@ -1012,10 +760,10 @@ void display()
    }
    
    // Draw Cutman
-  // if (toggleCutman) {
-   //   cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
-    //  cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
-   //}
+   if (toggleCutman) {
+      cutman(1.5, 0.45, 0.4, 0.25, 0, 225, 0);
+      cutman(1, 0.56, 1.5, 0.1, 0, 180, 0);
+   }
 
    //  White
    glColor3f(1,1,1);
@@ -1041,8 +789,8 @@ void display()
 
    //  Display parameters
    glWindowPos2i(5,5);
-   Print("Angle=%d,%d  Dim=%.1f FOV=%d Projection=%s Light=%s Texture=%",
-     th,ph,dim,fov,mode?"Perpective":"Orthogonal",light?"On":"Off", texture_mode?"Replace":"Modulate");
+   Print("Angle=%d,%d  Dim=%.1f FOV=%d Projection=%s Light=%s",
+     th,ph,dim,fov,mode?"Perpective":"Orthogonal",light?"On":"Off");
    if (light)
    {
       glWindowPos2i(5,45);
@@ -1135,12 +883,6 @@ void key(unsigned char ch,int x,int y)
    //  Toggle lighting
    else if (ch == 'l' || ch == 'L')
       light = 1-light;
-   //  Toggle texture mode
-   else if (ch == 'T')
-      texture_mode = 1-texture_mode;
-   //  Toggle textures mode
-   else if (ch == 't')
-      ntex = 1-ntex;
    //  Switch projection mode
    else if (ch == 'p' || ch == 'P')
       mode = 1-mode;
@@ -1239,7 +981,7 @@ int main(int argc,char* argv[])
    glutInitWindowSize(1000,800);
    glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH | GLUT_DOUBLE);
    //  Create the window
-   glutCreateWindow("Bo Cao CSCI-5229 Computer Graphics Assignment 6");
+   glutCreateWindow("Bo Cao CSCI-5229 Computer Graphics Assignment 5");
    //  Tell GLUT to call "idle" when there is nothing else to do
    glutIdleFunc(idle);
    //  Tell GLUT to call "display" when the scene should be drawn
@@ -1251,17 +993,6 @@ int main(int argc,char* argv[])
    //  Tell GLUT to call "key" when a key is pressed
    glutKeyboardFunc(key);
    //  Pass control to GLUT so it can interact with the user
-
-   // Load textures
-   /*
-   texture[0] = LoadTexBMP("crate.bmp");
-   texture[1] = LoadTexBMP("img1.bmp");
-   texture[2] = LoadTexBMP("img2.bmp");
-   texture[3] = LoadTexBMP("img3.bmp");
-   texture[4] = LoadTexBMP("img4.bmp");
-   texture[5] = LoadTexBMP("img5.bmp");
-   texture[6] = LoadTexBMP("img6.bmp");
-*/
    ErrCheck("init");
    glutMainLoop();
    return 0;
